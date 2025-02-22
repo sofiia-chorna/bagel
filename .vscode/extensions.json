@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ms-python.python", // Python language support
+    "ms-python.vscode-pylance", // Python language server
+    "ms-python.black-formatter", // FORMATTER (black, one of the best python formatters)
+    "charliermarsh.ruff" // LINTER (ruff, blazingly fast python linter, written in rust)
+  ]
+}

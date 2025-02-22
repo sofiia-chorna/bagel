@@ -1,0 +1,31 @@
+{
+  // Generic settings :
+  "editor.formatOnSave": true, // Format files on save
+  "formatFiles.runOrganizeImports": true, // Sort imports when formatting
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+
+  // Python
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter", // Use Black formatter for python
+    "editor.formatOnType": true
+  },
+  "python.analysis.typeCheckingMode": "basic", // or "strict" : use stricter python type checking
+
+  // Deactivate some warnings because there are many python libs that do not respect strict typing
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingTypeStubs": "none", // Scipy does not have type stubs
+    "reportUnknownMemberType": "none", // Member types are not complete for numpy
+    "reportUnknownVariableType": "none", // Skimage.io has unknown variable types
+    "reportUnknownArgumentType": "none",
+    "reportUnknownParameterType": "none", // Disable warnings when a type is partially unknown
+    "reportUnknownLambdaType": "none",
+    "reportMissingTypeArgument": "none", // Allow "generic" types like lst, dict, np.ndarray...
+
+    // Set severity to Warning
+    "reportUnusedVariable": "warning",
+    "reportMissingParameterType": "warning",
+    "reportGeneralTypeIssues": "error"
+  }
+}
