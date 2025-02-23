@@ -1,4 +1,4 @@
 feature_extraction:
-  model: "alexnet"
+  model_name: "alexnet"
   dataset: "cats_dogs_cars"
   batch_size: 64
