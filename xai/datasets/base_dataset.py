@@ -28,3 +28,7 @@ class BaseDataset(Dataset, ABC):
     @abstractmethod
     def __getitem__(self, index: int) -> tuple[Tensor, Tensor]:
         pass
+
+    @abstractmethod
+    def get_num_classes(self) -> int:
+        pass
