@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import torch
 from torch import Tensor
 from torch.utils.data import Dataset
 import torchvision.transforms.v2 as transforms
@@ -6,8 +7,9 @@ from typing import Optional, Callable
 
 _default_transform = transforms.Compose(
     [
+        transforms.ToImage(),
+        transforms.ToDtype(torch.float32, scale=True),
         transforms.Resize((224, 224)),
-        transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ]
 )
