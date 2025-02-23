@@ -21,3 +21,6 @@ class CatsDogsCars(BaseDataset):
         image = self.transform(image)
 
         return image, torch.tensor(label, dtype=torch.long)
+
+    def get_num_classes(self) -> int:
+        return len(self.data.unique("label"))
