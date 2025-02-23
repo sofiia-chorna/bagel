@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import Callable, Optional
+
 import torch
+import torchvision.transforms.v2 as transforms
 from torch import Tensor
 from torch.utils.data import Dataset
-import torchvision.transforms.v2 as transforms
-from typing import Optional, Callable
 
 _default_transform = transforms.Compose(
     [

@@ -1,10 +1,10 @@
-import time
-import os
 import logging
+import os
+import time
 from pathlib import Path
 
 
-def get_logger() -> logging.Logger:
+def _configure_logger() -> logging.Logger:
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 
@@ -20,3 +20,6 @@ def get_logger() -> logging.Logger:
     logger.addHandler(file_handler)
 
     return logger
+
+
+logger = _configure_logger()
