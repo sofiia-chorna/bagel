@@ -16,7 +16,6 @@ class ResNet18(BaseModel):
         in_features = int(self.resnet18.fc.in_features)
         self.resnet18.fc = nn.Linear(in_features, num_classes)
 
-        print(self.resnet18)
         self.resnet18.to(DEVICE)
 
         if checkpoint_path:
