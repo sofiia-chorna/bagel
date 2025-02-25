@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 import torch
 from torch import Tensor, nn
-from torchvision import models
+from torchvision.models import ResNet18_Weights, resnet18
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
@@ -11,7 +11,7 @@ from xai.utils.consts import DEVICE
 class ResNet18(BaseModel):
     def __init__(self, num_classes: int, checkpoint_path: Optional[str] = None) -> None:
         super().__init__()
-        self.resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
+        self.resnet18 = resnet18(weights=ResNet18_Weights.DEFAULT)
 
         in_features = int(self.resnet18.fc.in_features)
         self.resnet18.fc = nn.Linear(in_features, num_classes)
@@ -25,7 +25,7 @@ class ResNet18(BaseModel):
     def forward(self, x: Tensor):
         return self.resnet18(x)  # type: ignore
 
-    def get_conv_layers(self) -> Dict[str, nn.Module]:
+    def get_layers(self) -> Dict[str, nn.Module]:
         return {
             "bn1": self.resnet18.bn1,
             "layer1": self.resnet18.layer1[-1],

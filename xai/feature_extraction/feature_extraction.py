@@ -18,7 +18,7 @@ def run_extract_features(model: BaseModel, datamodule: DataModule) -> Dict[str, 
     model.to(DEVICE)
     model.eval()
 
-    layers: Dict[str, nn.Module] = model.get_conv_layers()
+    layers: Dict[str, nn.Module] = model.get_layers()
 
     global_pool = nn.AdaptiveAvgPool2d((1, 1))
 

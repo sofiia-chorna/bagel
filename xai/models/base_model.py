@@ -17,7 +17,7 @@ class BaseModel(nn.Module, ABC):
         """
 
     @abstractmethod
-    def get_conv_layers(self) -> Dict[str, nn.Module]:
+    def get_layers(self) -> Dict[str, nn.Module]:
         """Get dict of layers to be used in feature extraction
 
         Returns:

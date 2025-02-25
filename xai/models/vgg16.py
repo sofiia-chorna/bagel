@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 import torch
 from torch import Tensor, nn
-from torchvision import models
+from torchvision.models import VGG16_Weights, vgg16
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
@@ -11,7 +11,7 @@ from xai.utils.consts import DEVICE
 class VGG16(BaseModel):
     def __init__(self, num_classes: int, checkpoint_path: Optional[str] = None) -> None:
         super().__init__()
-        self.vgg16 = models.vgg16(weights=models.VGG16_Weights.DEFAULT)
+        self.vgg16 = vgg16(weights=VGG16_Weights.DEFAULT)
 
         in_features = int(self.vgg16.classifier[-1].in_features)  # type: ignore
         self.vgg16.classifier[-1] = torch.nn.Linear(in_features, num_classes)
@@ -25,7 +25,7 @@ class VGG16(BaseModel):
     def forward(self, x: Tensor):
         return self.vgg16(x)  # type: ignore
 
-    def get_conv_layers(self) -> Dict[str, nn.Module]:
+    def get_layers(self) -> Dict[str, nn.Module]:
         return {
             "conv1_1": self.vgg16.features[0],
             "conv2_1": self.vgg16.features[5],
