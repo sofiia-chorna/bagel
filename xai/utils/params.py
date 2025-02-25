@@ -36,19 +36,24 @@ class Params:
         with open(path, "r") as stream:
             params = yaml.safe_load(stream)
 
+            feature_extraction = None
+            multilabel_classification = None
+
             # feature extraction params
             feat_extraction_params = params.get("feature_extraction")
             if feat_extraction_params:
-                feat_extraction = FeatureExtraction(**feat_extraction_params)
+                feature_extraction = FeatureExtraction(**feat_extraction_params)
 
-            # multilabel classifmultilabel_classificationication params
-            multilable_cls_params = params.get("multilable_classification")
-            if multilable_cls_params:
-                multilabel_cls = MultilabelClassification(**multilable_cls_params)
+            # multilabel classification params
+            multilabel_cls_params = params.get("multilabel_classification")
+            if multilabel_cls_params:
+                multilabel_classification = MultilabelClassification(
+                    **multilabel_cls_params
+                )
 
             return cls(
-                feature_extraction=feat_extraction,
-                multilabel_classification=multilabel_cls,
+                feature_extraction=feature_extraction,
+                multilabel_classification=multilabel_classification,
             )
 
     def to_json(self) -> str:
