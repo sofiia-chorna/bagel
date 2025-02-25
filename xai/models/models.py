@@ -1,6 +1,7 @@
 from xai.models.alexnet import AlexNet
 from xai.models.resnet18 import ResNet18
 from xai.models.vgg16 import VGG16
+from xai.models.vit import ViT
 from xai.utils.consts import MODEL_NAMES
 from xai.utils.logger import logger
 
@@ -17,6 +18,9 @@ def get_model(model_name: MODEL_NAMES, num_classes: int):
 
         case "vgg16":
             return VGG16(num_classes)
+
+        case "vit":
+            return ViT(num_classes)
 
         case _:
             raise ValueError(f"'{model_name}' no such model available")
