@@ -46,9 +46,9 @@ def run_extract_features(model: BaseModel, datamodule: DataModule) -> Dict[str, 
         key: torch.cat(features, dim=0) for key, features in extracted_features.items()
     }
 
-    save_dir = Path("logs")
+    save_dir = Path("features")
     save_dir.mkdir(exist_ok=True)
-    save_path = os.path.join(f"{model.get_name()}_features.pt")
+    save_path = os.path.join(save_dir, f"{model.get_name()}_features.pt")
     torch.save(final_features, save_path)
 
     logger.info(f"Features are saved to {save_path}")
