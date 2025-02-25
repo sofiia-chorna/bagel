@@ -2,6 +2,7 @@ from typing import Dict, List, Set
 
 import numpy as np
 from pandas import DataFrame
+from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -31,16 +32,16 @@ def evaluate(
     concept_avg_probabilities: Dict[str, float] = {}
     concept_accuracies: Dict[str, float] = {}
 
-    y_pred: np.ndarray = classifier.predict(X_test)
+    y_pred: np.ndarray = classifier.predict(X_test)  # type: ignore
 
     for i, concept in enumerate(concepts):
         # calculate average probability
-        binary_clf = classifier.estimators_[i]
-        probs: np.ndarray = binary_clf.predict_proba(X_test)
+        binary_clf: BaseEstimator = classifier.estimators_[i]
+        probs: np.ndarray = binary_clf.predict_proba(X_test)  # type: ignore
         concept_avg_probabilities[concept] = probs[:, 1].mean().item()
 
         # calculate accuracy
-        concept_accuracies[concept] = accuracy_score(y_test[:, i], y_pred[:, i])
+        concept_accuracies[concept] = accuracy_score(y_test[:, i], y_pred[:, i])  # type: ignore
 
     return {
         "probability": concept_avg_probabilities,
