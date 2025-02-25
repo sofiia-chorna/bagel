@@ -11,27 +11,20 @@ from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
 from torch import Tensor
 
 
-def get_valid_concepts(concepts: List[str], y_concepts: np.ndarray) -> List[int]:
-    valid_concepts = []
-    for i, _concept in enumerate(concepts):
-        if len(np.unique(y_concepts[:, i])) >= 2:
-            valid_concepts.append(i)
-    return valid_concepts
-
-
 def get_multilabel_binarizer(df: DataFrame) -> MultiLabelBinarizer:
     all_concepts: Set[str] = set()
-    for _, group in df.groupby("label"):
-        for concepts in group["concepts"]:
-            all_concepts.update(concepts)
+
+    for concepts in df["concepts"]:
+        all_concepts.update(concepts)
+
     mlb = MultiLabelBinarizer()
     mlb.fit([list(all_concepts)])
     return mlb
 
 
 def evaluate(
-    concepts: List[str],
     classifier: MultiOutputClassifier,
+    concepts: List[str],
     X_test: np.ndarray,
     y_test: np.ndarray,
 ) -> Dict[str, Dict[str, float]]:
@@ -44,8 +37,7 @@ def evaluate(
         # calculate average probability
         binary_clf = classifier.estimators_[i]
         probs: np.ndarray = binary_clf.predict_proba(X_test)
-        probs_concept_present: np.ndarray = probs[:, 1]
-        concept_avg_probabilities[concept] = probs_concept_present.mean().item()
+        concept_avg_probabilities[concept] = probs[:, 1].mean().item()
 
         # calculate accuracy
         concept_accuracies[concept] = accuracy_score(y_test[:, i], y_pred[:, i])
@@ -65,40 +57,41 @@ def run_multilabel_clf(
     for layer, features in features_dict.items():
         df[layer] = list(features.numpy())
 
-    for layer in features_dict.keys():
-        layer_results = {}
+        X = np.array(df[layer].to_list())
+        y = mlb.transform(df["concepts"].tolist())
 
-        for label, group in df.groupby("label"):
-            X = np.array(group[layer].tolist())
-            y_concepts = group["concepts"].tolist()
+        X_train, X_test, y_train, _y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
 
-            y_encoded = mlb.transform(y_concepts)
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
 
-            valid_concepts = get_valid_concepts(mlb.classes_, y_encoded)
-            X = X[:, valid_concepts]
-            y_encoded = y_encoded[:, valid_concepts]
-
-            X_train, X_test, y_train, y_test = train_test_split(
-                X, y_encoded, test_size=0.2, random_state=42
-            )
-
-            scaler = StandardScaler()
-            X_train = scaler.fit_transform(X_train)
-            X_test = scaler.transform(X_test)
-
-            classifier = MultiOutputClassifier(
-                OneVsRestClassifier(
-                    LogisticRegression(
-                        solver="liblinear",
-                        class_weight="balanced",
-                        max_iter=1000,
-                        C=0.1,
-                    )
+        classifier = MultiOutputClassifier(
+            OneVsRestClassifier(
+                LogisticRegression(
+                    solver="liblinear",
+                    class_weight="balanced",
+                    max_iter=1000,
+                    C=0.1,
                 )
             )
-            classifier.fit(X_train, y_train)
+        )
 
-            layer_results[label] = evaluate(mlb.classes_, classifier, X_test, y_test)
+        classifier.fit(X_train, y_train)
+
+        layer_results = {}
+        for label, group in df.groupby("label"):
+            X_test_label = np.array(group[layer].tolist())
+            y_test_label = mlb.transform(group["concepts"].tolist())
+
+            layer_results[label] = evaluate(
+                classifier=classifier,
+                concepts=mlb.classes_,
+                X_test=X_test_label,
+                y_test=y_test_label,
+            )
 
         results[layer] = layer_results
 
