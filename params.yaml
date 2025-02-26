@@ -1,4 +1,6 @@
-feature_extraction:
-  model_name: "alexnet"
-  dataset: "cats_dogs_cars"
-  batch_size: 64
+batch_size: 64
+dataset_type: "hugging_face"  # ["hugging_face", "local"]
+dataset_name: "ENSTA-U2IS/HuskyVsWolf"
+models: ["alexnet", "resnet18", "vgg16"]
+train_concepts_path: "concepts/ENSTA-U2IS/HuskyVsWolf_train.pkl"  # run 'annotate' to get it
+val_concepts_path: "concepts/ENSTA-U2IS/HuskyVsWolf_val.pkl"  # run 'annotate' to get it
