@@ -1,15 +1,32 @@
 import json
+import pickle
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Literal
+
+import torch
 
 from xai.utils.logger import logger
 
 
-def save_json(file_path: str, value: Any):
+def save(type: Literal["json", "torch", "pickle"], file_path: str, value: Any):
     save_path = Path(file_path)
     save_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(save_path, "w") as f:
-        json.dump(value, f, indent=4)
+    match type:
+        case "json":
+            with open(save_path, "w") as f:
+                json.dump(value, f, indent=4)
+
+        case "torch":
+            torch.save(value, save_path)
+
+        case "pickle":
+            with open(save_path, "wb") as f:
+                pickle.dump(value, f)
 
     logger.info(f"Results are saved to {save_path}")
+
+
+def load_json(file_path: str) -> Dict[str, Any]:
+    with open(file_path) as f:
+        return json.load(f)
