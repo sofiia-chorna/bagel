@@ -1,18 +1,16 @@
-import os
-from pathlib import Path
 from typing import Dict, List, Tuple
 
 import torch
 from torch import Tensor, nn
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from xai.datasets.datamodule import DataModule
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
 from xai.utils.logger import logger
 
 
-def run_extract_features(model: BaseModel, datamodule: DataModule) -> Dict[str, Tensor]:
+def run_extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
     logger.info("Start extracting features")
 
     model.to(DEVICE)
@@ -35,7 +33,7 @@ def run_extract_features(model: BaseModel, datamodule: DataModule) -> Dict[str, 
         hooks.append(hook)
 
     with torch.no_grad():
-        for images, _ in tqdm(datamodule.loader):
+        for images, _ in tqdm(loader):
             images = images.to(DEVICE)
             _ = model(images)
 
@@ -46,11 +44,6 @@ def run_extract_features(model: BaseModel, datamodule: DataModule) -> Dict[str, 
         key: torch.cat(features, dim=0) for key, features in extracted_features.items()
     }
 
-    save_dir = Path("features")
-    save_dir.mkdir(exist_ok=True)
-    save_path = os.path.join(save_dir, f"{model.get_name()}_features.pt")
-    torch.save(final_features, save_path)
-
-    logger.info(f"Features are saved to {save_path}")
+    logger.info(f"End extracting features")
 
     return final_features
