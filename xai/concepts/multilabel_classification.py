@@ -101,3 +101,60 @@ def run_multilabel_clf(
     logger.info("End multilabel classification")
 
     return results
+
+
+def run_multilabel_clf_by_class(
+    train_df: DataFrame,
+    val_df: DataFrame,
+    train_features_dict: Dict[str, Tensor],
+    val_features_dict: Dict[str, Tensor],
+) -> Dict[str, Dict[str, Dict[str, Dict[str, float]]]]:
+    logger.info("Start multilabel classification")
+
+    mlb = get_multilabel_binarizer(train_df)
+    results = {}
+
+    for layer, train_features in train_features_dict.items():
+        train_df[layer] = list(train_features.numpy())
+        val_df[layer] = list(val_features_dict[layer].numpy())
+
+        layer_results = {}
+
+        # Train per category (label)
+        for label, group in train_df.groupby("label"):
+            X_train_label = np.array(group[layer].tolist())
+            y_train_label = mlb.transform(group["concepts"].tolist())
+
+            scaler = StandardScaler()
+            X_train_label = scaler.fit_transform(X_train_label)
+
+            classifier = MultiOutputClassifier(
+                OneVsRestClassifier(
+                    LogisticRegression(
+                        solver="liblinear",
+                        class_weight="balanced",
+                        max_iter=1000,
+                        C=0.1,
+                    )
+                )
+            )
+            classifier.fit(X_train_label, y_train_label)
+
+            # Evaluate per category
+            X_test_label = np.array(val_df[val_df["label"] == label][layer].tolist())
+            y_test_label = mlb.transform(val_df[val_df["label"] == label]["concepts"].tolist())
+
+            X_test_label = scaler.transform(X_test_label)
+
+            layer_results[label] = evaluate(
+                classifier=classifier,
+                concepts=mlb.classes_,
+                X_test=X_test_label,
+                y_test=y_test_label,
+            )
+
+        results[layer] = layer_results
+
+    logger.info("End multilabel classification")
+
+    return results
