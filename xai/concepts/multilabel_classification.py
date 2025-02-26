@@ -5,11 +5,12 @@ from pandas import DataFrame
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
 from torch import Tensor
+
+from xai.utils.logger import logger
 
 
 def get_multilabel_binarizer(df: DataFrame) -> MultiLabelBinarizer:
@@ -50,24 +51,25 @@ def evaluate(
 
 
 def run_multilabel_clf(
-    df: DataFrame, features_dict: Dict[str, Tensor]
+    train_df: DataFrame,
+    val_df: DataFrame,
+    train_features_dict: Dict[str, Tensor],
+    val_features_dict: Dict[str, Tensor],
 ) -> Dict[str, Dict[str, Dict[str, Dict[str, float]]]]:
-    mlb = get_multilabel_binarizer(df)
+    logger.info("Start multilabel classification")
+
+    mlb = get_multilabel_binarizer(train_df)
     results = {}
 
-    for layer, features in features_dict.items():
-        df[layer] = list(features.numpy())
+    for layer, train_features in train_features_dict.items():
+        train_df[layer] = list(train_features.numpy())
+        val_df[layer] = list(val_features_dict[layer].numpy())
 
-        X = np.array(df[layer].to_list())
-        y = mlb.transform(df["concepts"].tolist())
-
-        X_train, X_test, y_train, _y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
-        )
+        X_train = np.array(train_df[layer].to_list())
+        y_train = mlb.transform(train_df["concepts"].tolist())
 
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
 
         classifier = MultiOutputClassifier(
             OneVsRestClassifier(
@@ -79,12 +81,12 @@ def run_multilabel_clf(
                 )
             )
         )
-
         classifier.fit(X_train, y_train)
 
         layer_results = {}
-        for label, group in df.groupby("label"):
+        for label, group in val_df.groupby("label"):
             X_test_label = np.array(group[layer].tolist())
+            X_test_label = scaler.transform(X_test_label)
             y_test_label = mlb.transform(group["concepts"].tolist())
 
             layer_results[label] = evaluate(
@@ -95,5 +97,7 @@ def run_multilabel_clf(
             )
 
         results[layer] = layer_results
+
+    logger.info("End multilabel classification")
 
     return results
