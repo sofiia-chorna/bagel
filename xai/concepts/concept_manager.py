@@ -19,6 +19,7 @@ class Concept_Manager:
         "abstract": "Is the concept of {concept} associated with this object?",
         "physical_parts": "Does this object visibly have {concept}?",
         "scene": "Is this object in a {concept} setting?",
+        "material": "Is this object made of {concept}?"
     }
 
     def __init__(self):
