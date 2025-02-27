@@ -27,3 +27,27 @@ Broad chest
 Long muzzle
 Large paws
 Thick fur
+
+[physical_parts] kit fox:
+Large-ears
+Small-body
+Slim-build
+Bushy-tail
+Black-tipped-tail
+Tan-fur
+Dark-muzzle
+Short-legs
+White-underside
+Delicate-face
+
+[physical_parts] red fox:
+Reddish-fur
+White-underside
+Black-stockings
+White-tipped-tail
+Dark-Ear-Rims
+Narrow-Snout
+Slender-Body
+Long-Legs
+Amber-Eyes
+Fluffy-Fur
