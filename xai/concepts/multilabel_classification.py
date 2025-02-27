@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Callable, Dict, List, Set
 
 import numpy as np
 from pandas import DataFrame
@@ -10,6 +10,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
 from torch import Tensor
 
+from xai.concepts.concept_manager import concept_manager
 from xai.utils.logger import logger
 
 
@@ -55,7 +56,8 @@ def run_multilabel_clf(
     val_df: DataFrame,
     train_features_dict: Dict[str, Tensor],
     val_features_dict: Dict[str, Tensor],
-) -> Dict[str, Dict[str, Dict[str, Dict[str, float]]]]:
+    label_mapping: Callable[[int], str],
+) -> Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, float]]]]]:
     logger.info("Start multilabel classification")
 
     mlb = get_multilabel_binarizer(train_df)
@@ -84,23 +86,48 @@ def run_multilabel_clf(
         classifier.fit(X_train, y_train)
 
         layer_results = {}
-        for label, group in val_df.groupby("label"):
+        for label, group in val_df.groupby("label", sort=False):
             X_test_label = np.array(group[layer].tolist())
             X_test_label = scaler.transform(X_test_label)
             y_test_label = mlb.transform(group["concepts"].tolist())
 
-            layer_results[label] = evaluate(
+            label_results = evaluate(
                 classifier=classifier,
                 concepts=mlb.classes_,
                 X_test=X_test_label,
                 y_test=y_test_label,
             )
 
+            label_name = label_mapping(int(label))
+            layer_results[label_name] = format_by_category(label_results)
+
         results[layer] = layer_results
 
     logger.info("End multilabel classification")
 
     return results
+
+
+def format_by_category(label_results: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+    category_results = {
+        "probability": {},
+        "concept_accuracies": {},
+    }
+
+    for category, concepts_in_category in concept_manager.all_concepts.items():
+        category_results["probability"][category] = {
+            concept: label_results["probability"][concept]
+            for concept in concepts_in_category
+            if concept in label_results["probability"]
+        }
+
+        category_results["concept_accuracies"][category] = {
+            concept: label_results["concept_accuracies"][concept]
+            for concept in concepts_in_category
+            if concept in label_results["concept_accuracies"]
+        }
+
+    return category_results
 
 
 def run_multilabel_clf_by_class(
@@ -121,7 +148,7 @@ def run_multilabel_clf_by_class(
         layer_results = {}
 
         # Train per category (label)
-        for label, group in train_df.groupby("label"):
+        for label, group in train_df.groupby("label", sort=False):
             X_train_label = np.array(group[layer].tolist())
             y_train_label = mlb.transform(group["concepts"].tolist())
 

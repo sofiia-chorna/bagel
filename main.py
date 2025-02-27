@@ -1,7 +1,7 @@
 import click
 from datasets import Dataset, load_dataset
 
-from xai.concepts.concept_manager import Concept_Manager
+from xai.concepts.concept_manager import concept_manager
 from xai.concepts.multilabel_classification import run_multilabel_clf
 from xai.datasets.datamodule import DataModule
 from xai.feature_extraction.feature_extraction import extract_features
@@ -28,8 +28,6 @@ def annotate(path: str):
     val_ds: Dataset = load_dataset(params.dataset_name, split="validation")  # type: ignore
 
     # concepts
-    concept_manager = Concept_Manager()
-
     train_concepts_df = concept_manager.ask_llm(train_ds, params.batch_size)
     val_concepts_df = concept_manager.ask_llm(val_ds, params.batch_size)
 
@@ -53,8 +51,6 @@ def explain(path: str):
     datamodule = DataModule(params.dataset_type, params.dataset_name, params.batch_size)
 
     # concepts
-    concept_manager = Concept_Manager()
-
     if params.train_concepts_path and params.val_concepts_path:
         train_concepts_df = concept_manager.load(params.train_concepts_path)
         val_concepts_df = concept_manager.load(params.val_concepts_path)
@@ -63,8 +59,6 @@ def explain(path: str):
             "No 'train_concepts_path' or 'val_concepts_path' provided. Please run annotation first 'python3 main.py annotate'"
         )
         exit(0)
-
-    print(train_concepts_df.head(1)["concepts"])
 
     # calculate
     for model_name in params.models:
@@ -82,6 +76,7 @@ def explain(path: str):
             val_df=val_concepts_df,
             train_features_dict=train_features,
             val_features_dict=val_features,
+            label_mapping=datamodule.label_mapping,
         )
         save("json", f"results/{base_name}.json", results)
 

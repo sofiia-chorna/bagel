@@ -123,3 +123,9 @@ class Concept_Manager:
         ]
 
         return answers
+    
+    def get_concept_categories(self) -> List[str]:
+        return list(self.all_concepts.keys())
+
+# singleton
+concept_manager = Concept_Manager()

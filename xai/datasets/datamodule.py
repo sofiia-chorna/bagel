@@ -24,6 +24,7 @@ class DataModule:
                 dataset_name, split="validation", from_disk=from_disk
             )
             self.num_classes = train_dataset.get_num_classes()
+            self.label_mapping = train_dataset.get_label_mapping()
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
 
