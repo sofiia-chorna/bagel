@@ -27,10 +27,8 @@ class DataModule:
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
 
-        self.train_loader = self._get_dataloader(
-            train_dataset, batch_size, shuffle=True
-        )
-        self.val_loader = self._get_dataloader(val_dataset, batch_size, shuffle=False)
+        self.train_loader = self._get_dataloader(train_dataset, batch_size)
+        self.val_loader = self._get_dataloader(val_dataset, batch_size)
 
         logger.info(f"End creating dataloaders")
 
