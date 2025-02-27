@@ -10,7 +10,7 @@ from xai.utils.consts import DEVICE
 from xai.utils.logger import logger
 
 
-def run_extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
+def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
     logger.info("Start extracting features")
 
     model.to(DEVICE)

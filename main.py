@@ -4,7 +4,7 @@ from datasets import Dataset, load_dataset
 from xai.concepts.concept_manager import Concept_Manager
 from xai.concepts.multilabel_classification import run_multilabel_clf
 from xai.datasets.datamodule import DataModule
-from xai.feature_extraction.feature_extraction import run_extract_features
+from xai.feature_extraction.feature_extraction import extract_features
 from xai.models.models import get_model
 from xai.utils.cli import path
 from xai.utils.file import save
@@ -36,8 +36,8 @@ def annotate(path: str):
     # TODO: implement
     # concept_df = concept_manager.extract_concepts(computation_params.dataset)
 
-    print(type(train_concepts_df))
-    print(train_concepts_df)
+    logger.info(type(train_concepts_df))
+    logger.info(train_concepts_df)
 
     save("pickle", f"concepts/{params.dataset_name}_train.pkl", train_concepts_df)
     save("pickle", f"concepts/{params.dataset_name}_val.pkl", val_concepts_df)
@@ -70,10 +70,10 @@ def explain(path: str):
     for model_name in params.models:
         model = get_model(model_name, datamodule.num_classes)
 
-        train_features = run_extract_features(model, datamodule.train_loader)
-        val_features = run_extract_features(model, datamodule.val_loader)
+        train_features = extract_features(model, datamodule.train_loader)
+        val_features = extract_features(model, datamodule.val_loader)
 
-        base_name = f"{params.dataset_name}_{model.get_name()}"
+        base_name = f"{params.dataset_name}_{model_name}"
         save("torch", f"features/{base_name}_train.pt", train_features)
         save("torch", f"features/{base_name}_val.pt", val_features)
 
