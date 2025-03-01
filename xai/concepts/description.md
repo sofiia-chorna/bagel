@@ -53,8 +53,58 @@ Amber-Eyes
 Fluffy-Fur
 
 [physical_parts] monumai:
-['arco-apuntado' 'arco-conopial' 'arco-herradura' 'arco-lobulado'
- 'arco-medio-punto' 'arco-trilobulado' 'columna-salomonica'
- 'dintel-adovelado' 'fronton' 'fronton-curvo' 'fronton-partido'
- 'ojo-de-buey' 'pinaculo-gotico' 'serliana' 'vano-adintelado']
- 
+arco-apuntado,
+arco-conopial,
+arco-herradura,
+arco-lobulado,
+arco-medio-punto,
+arco-trilobulado,
+columna-salomonica,
+dintel-adovelado,
+fronton,
+fronton-curvo,
+fronton-partido,
+ojo-de-buey,
+pinaculo-gotico,
+serliana,
+vano-adintelado
+
+
+derm7pt:
+{
+   "pigment_network":[
+      "typical pigment network",
+      "atypical pigment network"
+   ],
+   "streaks":[
+      "irregular streaks",
+      "regular streaks"
+   ],
+   "pigmentation":[
+      "diffuse irregular pigmentation",
+      "localized irregular pigmentation",
+      "diffuse regular pigmentation",
+      "localized regular pigmentation"
+   ],
+   "regression_structures":[
+      "blue areas regression structures",
+      "combinations regression structures",
+      "white areas regression structures"
+   ],
+   "dots_and_globules":[
+      "irregular dots and globules",
+      "regular dots and globules"
+   ],
+   "blue_whitish_veil":[
+      "blue whitish veil"
+   ],
+   "vascular_structures":[
+      "arborizing vascular structures",
+      "within regression vascular structures",
+      "hairpin vascular structures",
+      "dotted vascular structures",
+      "comma vascular structures",
+      "linear irregular vascular structures",
+      "wreath vascular structures"
+   ]
+}
