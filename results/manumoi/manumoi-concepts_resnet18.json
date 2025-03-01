@@ -1,0 +1,972 @@
+{
+    "bn1": {
+        "Hispanic-Muslim": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.4621265222134747,
+                    "arco-conopial": 0.47715871732415793,
+                    "arco-herradura": 0.5249518282566502,
+                    "arco-lobulado": 0.4488580971935358,
+                    "arco-medio-punto": 0.4784403705017366,
+                    "arco-trilobulado": 0.4296314381504839,
+                    "columna-salomonica": 0.4707221467632948,
+                    "dintel-adovelado": 0.48367365743355445,
+                    "fronton": 0.45240865415394427,
+                    "fronton-curvo": 0.4541444046436391,
+                    "fronton-partido": 0.4773817979326781,
+                    "ojo-de-buey": 0.43711686775451025,
+                    "pinaculo-gotico": 0.30652581150381725,
+                    "serliana": 0.4424554887835302,
+                    "vano-adintelado": 0.48023874599500743
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.6615384615384615,
+                    "arco-conopial": 0.5846153846153846,
+                    "arco-herradura": 0.5076923076923077,
+                    "arco-lobulado": 0.5846153846153846,
+                    "arco-medio-punto": 0.5846153846153846,
+                    "arco-trilobulado": 0.6923076923076923,
+                    "columna-salomonica": 0.5692307692307692,
+                    "dintel-adovelado": 0.6,
+                    "fronton": 0.7384615384615385,
+                    "fronton-curvo": 0.676923076923077,
+                    "fronton-partido": 0.5538461538461539,
+                    "ojo-de-buey": 0.676923076923077,
+                    "pinaculo-gotico": 0.8,
+                    "serliana": 0.6461538461538462,
+                    "vano-adintelado": 0.6
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Baroque": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.4954890001171279,
+                    "arco-conopial": 0.4830872288867338,
+                    "arco-herradura": 0.4632912581817276,
+                    "arco-lobulado": 0.4177353970022354,
+                    "arco-medio-punto": 0.5018135088873061,
+                    "arco-trilobulado": 0.4515698300188368,
+                    "columna-salomonica": 0.4746550516250167,
+                    "dintel-adovelado": 0.43753964765803255,
+                    "fronton": 0.4864115559275939,
+                    "fronton-curvo": 0.4862515137523667,
+                    "fronton-partido": 0.49269298086532587,
+                    "ojo-de-buey": 0.45893547328915807,
+                    "pinaculo-gotico": 0.3788812206468771,
+                    "serliana": 0.41702947101544613,
+                    "vano-adintelado": 0.5020712932220366
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.4811320754716981,
+                    "arco-conopial": 0.5566037735849056,
+                    "arco-herradura": 0.5471698113207547,
+                    "arco-lobulado": 0.6509433962264151,
+                    "arco-medio-punto": 0.5377358490566038,
+                    "arco-trilobulado": 0.6132075471698113,
+                    "columna-salomonica": 0.5377358490566038,
+                    "dintel-adovelado": 0.6886792452830188,
+                    "fronton": 0.6886792452830188,
+                    "fronton-curvo": 0.5660377358490566,
+                    "fronton-partido": 0.5849056603773585,
+                    "ojo-de-buey": 0.6415094339622641,
+                    "pinaculo-gotico": 0.7075471698113207,
+                    "serliana": 0.7547169811320755,
+                    "vano-adintelado": 0.5094339622641509
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Renaissance": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.5047856309434138,
+                    "arco-conopial": 0.48671109326044293,
+                    "arco-herradura": 0.45493017726131946,
+                    "arco-lobulado": 0.41948001813730096,
+                    "arco-medio-punto": 0.4920921016507031,
+                    "arco-trilobulado": 0.4511633743322148,
+                    "columna-salomonica": 0.44093687470502857,
+                    "dintel-adovelado": 0.43031614765212595,
+                    "fronton": 0.5115480224333335,
+                    "fronton-curvo": 0.5124784735295651,
+                    "fronton-partido": 0.4693748784398125,
+                    "ojo-de-buey": 0.5230949454095729,
+                    "pinaculo-gotico": 0.4793273325067118,
+                    "serliana": 0.44808108271554714,
+                    "vano-adintelado": 0.5025116856574197
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.4,
+                    "arco-conopial": 0.6,
+                    "arco-herradura": 0.64,
+                    "arco-lobulado": 0.64,
+                    "arco-medio-punto": 0.58,
+                    "arco-trilobulado": 0.6,
+                    "columna-salomonica": 0.66,
+                    "dintel-adovelado": 0.72,
+                    "fronton": 0.46,
+                    "fronton-curvo": 0.48,
+                    "fronton-partido": 0.68,
+                    "ojo-de-buey": 0.68,
+                    "pinaculo-gotico": 0.58,
+                    "serliana": 0.78,
+                    "vano-adintelado": 0.6
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Gothic": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.4934471987647447,
+                    "arco-conopial": 0.47597604957703477,
+                    "arco-herradura": 0.4539834113798285,
+                    "arco-lobulado": 0.38929857849193805,
+                    "arco-medio-punto": 0.499939293683571,
+                    "arco-trilobulado": 0.44227287878474864,
+                    "columna-salomonica": 0.46944272393729425,
+                    "dintel-adovelado": 0.433842087782192,
+                    "fronton": 0.49285375283429056,
+                    "fronton-curvo": 0.49339516222115815,
+                    "fronton-partido": 0.4993024867690488,
+                    "ojo-de-buey": 0.4678848415898211,
+                    "pinaculo-gotico": 0.38660098592182385,
+                    "serliana": 0.43923196045802276,
+                    "vano-adintelado": 0.5024243333618771
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.5609756097560976,
+                    "arco-conopial": 0.573170731707317,
+                    "arco-herradura": 0.6585365853658537,
+                    "arco-lobulado": 0.7560975609756098,
+                    "arco-medio-punto": 0.4146341463414634,
+                    "arco-trilobulado": 0.5975609756097561,
+                    "columna-salomonica": 0.6463414634146342,
+                    "dintel-adovelado": 0.7439024390243902,
+                    "fronton": 0.524390243902439,
+                    "fronton-curvo": 0.6219512195121951,
+                    "fronton-partido": 0.5,
+                    "ojo-de-buey": 0.6463414634146342,
+                    "pinaculo-gotico": 0.7926829268292683,
+                    "serliana": 0.6707317073170732,
+                    "vano-adintelado": 0.5365853658536586
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        }
+    },
+    "layer1": {
+        "Hispanic-Muslim": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.32192106987435076,
+                    "arco-conopial": 0.3212842977598482,
+                    "arco-herradura": 0.7916076295698824,
+                    "arco-lobulado": 0.3823887790595612,
+                    "arco-medio-punto": 0.31246438376217633,
+                    "arco-trilobulado": 0.13567563123096532,
+                    "columna-salomonica": 0.10475004191769566,
+                    "dintel-adovelado": 0.5946482509891018,
+                    "fronton": 0.18907333231685491,
+                    "fronton-curvo": 0.13761185662293524,
+                    "fronton-partido": 0.21222559177072503,
+                    "ojo-de-buey": 0.27121782485712925,
+                    "pinaculo-gotico": 0.14135570076854395,
+                    "serliana": 0.16697614967950486,
+                    "vano-adintelado": 0.15640416357443335
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.8153846153846154,
+                    "arco-conopial": 0.8,
+                    "arco-herradura": 0.8769230769230769,
+                    "arco-lobulado": 0.7076923076923077,
+                    "arco-medio-punto": 0.8307692307692308,
+                    "arco-trilobulado": 0.9230769230769231,
+                    "columna-salomonica": 0.9846153846153847,
+                    "dintel-adovelado": 0.6,
+                    "fronton": 0.9384615384615385,
+                    "fronton-curvo": 0.9692307692307692,
+                    "fronton-partido": 0.9384615384615385,
+                    "ojo-de-buey": 0.8,
+                    "pinaculo-gotico": 0.9230769230769231,
+                    "serliana": 0.9076923076923077,
+                    "vano-adintelado": 0.9538461538461539
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Baroque": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.19704221699875676,
+                    "arco-conopial": 0.26456420995669516,
+                    "arco-herradura": 0.20047771879837126,
+                    "arco-lobulado": 0.11626997325750875,
+                    "arco-medio-punto": 0.5835896805282949,
+                    "arco-trilobulado": 0.12726666395030167,
+                    "columna-salomonica": 0.3363753448127345,
+                    "dintel-adovelado": 0.1447260123848324,
+                    "fronton": 0.5497966761917054,
+                    "fronton-curvo": 0.47496345897279996,
+                    "fronton-partido": 0.6256686908260178,
+                    "ojo-de-buey": 0.4291906027613872,
+                    "pinaculo-gotico": 0.12449953028835058,
+                    "serliana": 0.2960938329229381,
+                    "vano-adintelado": 0.6070255141457649
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.8867924528301887,
+                    "arco-conopial": 0.8301886792452831,
+                    "arco-herradura": 0.8962264150943396,
+                    "arco-lobulado": 0.9811320754716981,
+                    "arco-medio-punto": 0.6320754716981132,
+                    "arco-trilobulado": 0.9150943396226415,
+                    "columna-salomonica": 0.8490566037735849,
+                    "dintel-adovelado": 0.9433962264150944,
+                    "fronton": 0.5566037735849056,
+                    "fronton-curvo": 0.4811320754716981,
+                    "fronton-partido": 0.7452830188679245,
+                    "ojo-de-buey": 0.6415094339622641,
+                    "pinaculo-gotico": 0.9339622641509434,
+                    "serliana": 0.7830188679245284,
+                    "vano-adintelado": 0.7264150943396226
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Renaissance": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.24235678914102288,
+                    "arco-conopial": 0.29369045739337163,
+                    "arco-herradura": 0.23690484197251918,
+                    "arco-lobulado": 0.14824936861444807,
+                    "arco-medio-punto": 0.5308651635688613,
+                    "arco-trilobulado": 0.11130522080747968,
+                    "columna-salomonica": 0.22455807990616516,
+                    "dintel-adovelado": 0.14541799496851326,
+                    "fronton": 0.5998472250803791,
+                    "fronton-curvo": 0.4538485920254369,
+                    "fronton-partido": 0.4515761222194001,
+                    "ojo-de-buey": 0.5113169092014895,
+                    "pinaculo-gotico": 0.14247220196053953,
+                    "serliana": 0.3471315971514109,
+                    "vano-adintelado": 0.5366288556758225
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.88,
+                    "arco-conopial": 0.84,
+                    "arco-herradura": 0.86,
+                    "arco-lobulado": 0.96,
+                    "arco-medio-punto": 0.64,
+                    "arco-trilobulado": 0.96,
+                    "columna-salomonica": 0.88,
+                    "dintel-adovelado": 0.92,
+                    "fronton": 0.5,
+                    "fronton-curvo": 0.54,
+                    "fronton-partido": 0.64,
+                    "ojo-de-buey": 0.62,
+                    "pinaculo-gotico": 0.94,
+                    "serliana": 0.76,
+                    "vano-adintelado": 0.8
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Gothic": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.5935364350940311,
+                    "arco-conopial": 0.5931732746666387,
+                    "arco-herradura": 0.3747386039220734,
+                    "arco-lobulado": 0.20494285012005,
+                    "arco-medio-punto": 0.33173122866834515,
+                    "arco-trilobulado": 0.2930426529308637,
+                    "columna-salomonica": 0.12311190047097237,
+                    "dintel-adovelado": 0.18682349502519127,
+                    "fronton": 0.22423766832254713,
+                    "fronton-curvo": 0.18803283193287035,
+                    "fronton-partido": 0.20696054014752588,
+                    "ojo-de-buey": 0.2321999311268332,
+                    "pinaculo-gotico": 0.369385824645708,
+                    "serliana": 0.18136053522362452,
+                    "vano-adintelado": 0.16276225884024106
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.7804878048780488,
+                    "arco-conopial": 0.4634146341463415,
+                    "arco-herradura": 0.6829268292682927,
+                    "arco-lobulado": 0.8780487804878049,
+                    "arco-medio-punto": 0.7439024390243902,
+                    "arco-trilobulado": 0.8658536585365854,
+                    "columna-salomonica": 0.9634146341463414,
+                    "dintel-adovelado": 0.926829268292683,
+                    "fronton": 0.8658536585365854,
+                    "fronton-curvo": 0.9146341463414634,
+                    "fronton-partido": 0.8902439024390244,
+                    "ojo-de-buey": 0.8902439024390244,
+                    "pinaculo-gotico": 0.7682926829268293,
+                    "serliana": 0.926829268292683,
+                    "vano-adintelado": 0.8902439024390244
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        }
+    },
+    "layer2": {
+        "Hispanic-Muslim": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.23403308221663968,
+                    "arco-conopial": 0.1746958888452836,
+                    "arco-herradura": 0.8625185266626018,
+                    "arco-lobulado": 0.24868282590665536,
+                    "arco-medio-punto": 0.18978173597905024,
+                    "arco-trilobulado": 0.07685226995259835,
+                    "columna-salomonica": 0.07277853242726941,
+                    "dintel-adovelado": 0.5526991802164449,
+                    "fronton": 0.10495877351396747,
+                    "fronton-curvo": 0.08922840425504251,
+                    "fronton-partido": 0.0986941969528214,
+                    "ojo-de-buey": 0.13195407794727113,
+                    "pinaculo-gotico": 0.09046536925724873,
+                    "serliana": 0.08338438002026675,
+                    "vano-adintelado": 0.11078007251198543
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.8153846153846154,
+                    "arco-conopial": 0.8923076923076924,
+                    "arco-herradura": 0.8769230769230769,
+                    "arco-lobulado": 0.8923076923076924,
+                    "arco-medio-punto": 0.8615384615384616,
+                    "arco-trilobulado": 0.9692307692307692,
+                    "columna-salomonica": 0.9692307692307692,
+                    "dintel-adovelado": 0.7538461538461538,
+                    "fronton": 1.0,
+                    "fronton-curvo": 0.9846153846153847,
+                    "fronton-partido": 0.9846153846153847,
+                    "ojo-de-buey": 0.9230769230769231,
+                    "pinaculo-gotico": 0.9538461538461539,
+                    "serliana": 0.9846153846153847,
+                    "vano-adintelado": 0.9692307692307692
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Baroque": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.1384797169592549,
+                    "arco-conopial": 0.18443096032767578,
+                    "arco-herradura": 0.08105321420581002,
+                    "arco-lobulado": 0.0778346138882607,
+                    "arco-medio-punto": 0.607725801884287,
+                    "arco-trilobulado": 0.08886910091161314,
+                    "columna-salomonica": 0.27744030243837514,
+                    "dintel-adovelado": 0.06814207081846167,
+                    "fronton": 0.5208626375159054,
+                    "fronton-curvo": 0.45602307559064503,
+                    "fronton-partido": 0.6849289945253928,
+                    "ojo-de-buey": 0.3378701705992045,
+                    "pinaculo-gotico": 0.08123141191055001,
+                    "serliana": 0.19061735505429106,
+                    "vano-adintelado": 0.6335108097343762
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9150943396226415,
+                    "arco-conopial": 0.9056603773584906,
+                    "arco-herradura": 0.9811320754716981,
+                    "arco-lobulado": 0.9905660377358491,
+                    "arco-medio-punto": 0.7735849056603774,
+                    "arco-trilobulado": 0.9716981132075472,
+                    "columna-salomonica": 0.9245283018867925,
+                    "dintel-adovelado": 0.9811320754716981,
+                    "fronton": 0.6037735849056604,
+                    "fronton-curvo": 0.5094339622641509,
+                    "fronton-partido": 0.8018867924528302,
+                    "ojo-de-buey": 0.7547169811320755,
+                    "pinaculo-gotico": 0.9716981132075472,
+                    "serliana": 0.9056603773584906,
+                    "vano-adintelado": 0.7924528301886793
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Renaissance": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.1908021781369805,
+                    "arco-conopial": 0.21118119649588032,
+                    "arco-herradura": 0.11916151825039382,
+                    "arco-lobulado": 0.06189072201672875,
+                    "arco-medio-punto": 0.4846664876898182,
+                    "arco-trilobulado": 0.0745914139221267,
+                    "columna-salomonica": 0.14800242617675363,
+                    "dintel-adovelado": 0.08719298694073176,
+                    "fronton": 0.562478628243174,
+                    "fronton-curvo": 0.3657329430000257,
+                    "fronton-partido": 0.3341947588672331,
+                    "ojo-de-buey": 0.4453034110040559,
+                    "pinaculo-gotico": 0.08985285272134882,
+                    "serliana": 0.3197544091544142,
+                    "vano-adintelado": 0.5061055987361135
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9,
+                    "arco-conopial": 0.92,
+                    "arco-herradura": 0.94,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.7,
+                    "arco-trilobulado": 1.0,
+                    "columna-salomonica": 0.9,
+                    "dintel-adovelado": 0.96,
+                    "fronton": 0.62,
+                    "fronton-curvo": 0.68,
+                    "fronton-partido": 0.76,
+                    "ojo-de-buey": 0.82,
+                    "pinaculo-gotico": 0.96,
+                    "serliana": 0.78,
+                    "vano-adintelado": 0.82
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Gothic": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.6273282886546427,
+                    "arco-conopial": 0.5913512958769566,
+                    "arco-herradura": 0.19572548371224727,
+                    "arco-lobulado": 0.058207743445346995,
+                    "arco-medio-punto": 0.32188796764914746,
+                    "arco-trilobulado": 0.2686251943434281,
+                    "columna-salomonica": 0.07330781925182742,
+                    "dintel-adovelado": 0.11404651771109713,
+                    "fronton": 0.20415454965348692,
+                    "fronton-curvo": 0.11894840910773748,
+                    "fronton-partido": 0.14368244350223733,
+                    "ojo-de-buey": 0.18139997262931234,
+                    "pinaculo-gotico": 0.3185359223629767,
+                    "serliana": 0.1517096560700732,
+                    "vano-adintelado": 0.11137616232309727
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.8170731707317073,
+                    "arco-conopial": 0.6829268292682927,
+                    "arco-herradura": 0.8658536585365854,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.7439024390243902,
+                    "arco-trilobulado": 0.8658536585365854,
+                    "columna-salomonica": 0.975609756097561,
+                    "dintel-adovelado": 0.975609756097561,
+                    "fronton": 0.8902439024390244,
+                    "fronton-curvo": 0.9512195121951219,
+                    "fronton-partido": 0.9512195121951219,
+                    "ojo-de-buey": 0.8902439024390244,
+                    "pinaculo-gotico": 0.8780487804878049,
+                    "serliana": 0.9024390243902439,
+                    "vano-adintelado": 0.9024390243902439
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        }
+    },
+    "layer3": {
+        "Hispanic-Muslim": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.16165074262962426,
+                    "arco-conopial": 0.15778698599026866,
+                    "arco-herradura": 0.8775554847732874,
+                    "arco-lobulado": 0.18938951972289378,
+                    "arco-medio-punto": 0.11653435859016582,
+                    "arco-trilobulado": 0.062007614891666826,
+                    "columna-salomonica": 0.04792556497585468,
+                    "dintel-adovelado": 0.5265704215366624,
+                    "fronton": 0.059025060438765264,
+                    "fronton-curvo": 0.05836380071449174,
+                    "fronton-partido": 0.04949781823929846,
+                    "ojo-de-buey": 0.0666974207270299,
+                    "pinaculo-gotico": 0.09694348073497175,
+                    "serliana": 0.05563107529546626,
+                    "vano-adintelado": 0.06739126861093257
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.8923076923076924,
+                    "arco-conopial": 0.9230769230769231,
+                    "arco-herradura": 0.9384615384615385,
+                    "arco-lobulado": 0.9692307692307692,
+                    "arco-medio-punto": 0.8923076923076924,
+                    "arco-trilobulado": 0.9846153846153847,
+                    "columna-salomonica": 1.0,
+                    "dintel-adovelado": 0.7846153846153846,
+                    "fronton": 1.0,
+                    "fronton-curvo": 0.9692307692307692,
+                    "fronton-partido": 0.9846153846153847,
+                    "ojo-de-buey": 1.0,
+                    "pinaculo-gotico": 0.9538461538461539,
+                    "serliana": 0.9846153846153847,
+                    "vano-adintelado": 0.9538461538461539
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Baroque": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.08551483907414459,
+                    "arco-conopial": 0.13225225766359255,
+                    "arco-herradura": 0.04762536074335304,
+                    "arco-lobulado": 0.055883400631335345,
+                    "arco-medio-punto": 0.6454304033196896,
+                    "arco-trilobulado": 0.0942104438808613,
+                    "columna-salomonica": 0.2644839181692276,
+                    "dintel-adovelado": 0.050252910232689775,
+                    "fronton": 0.4725715781628575,
+                    "fronton-curvo": 0.3363741240821658,
+                    "fronton-partido": 0.7043302784390185,
+                    "ojo-de-buey": 0.2600202004079802,
+                    "pinaculo-gotico": 0.06425150872876498,
+                    "serliana": 0.16848854223386242,
+                    "vano-adintelado": 0.5882228883740639
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9811320754716981,
+                    "arco-conopial": 0.9339622641509434,
+                    "arco-herradura": 0.9905660377358491,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.9150943396226415,
+                    "arco-trilobulado": 0.9716981132075472,
+                    "columna-salomonica": 0.9245283018867925,
+                    "dintel-adovelado": 0.9905660377358491,
+                    "fronton": 0.6792452830188679,
+                    "fronton-curvo": 0.7075471698113207,
+                    "fronton-partido": 0.839622641509434,
+                    "ojo-de-buey": 0.9056603773584906,
+                    "pinaculo-gotico": 0.9905660377358491,
+                    "serliana": 0.8962264150943396,
+                    "vano-adintelado": 0.8207547169811321
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Renaissance": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.16359853575981795,
+                    "arco-conopial": 0.12864910281977565,
+                    "arco-herradura": 0.06649449829740113,
+                    "arco-lobulado": 0.0583477703808532,
+                    "arco-medio-punto": 0.5237072561777851,
+                    "arco-trilobulado": 0.06977610143244113,
+                    "columna-salomonica": 0.09744972121220793,
+                    "dintel-adovelado": 0.0770504943213255,
+                    "fronton": 0.5586232097848689,
+                    "fronton-curvo": 0.3026310591463341,
+                    "fronton-partido": 0.28406644003249154,
+                    "ojo-de-buey": 0.3708313480029911,
+                    "pinaculo-gotico": 0.08570387828347188,
+                    "serliana": 0.26471665328505134,
+                    "vano-adintelado": 0.473137761150063
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9,
+                    "arco-conopial": 0.98,
+                    "arco-herradura": 1.0,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.78,
+                    "arco-trilobulado": 1.0,
+                    "columna-salomonica": 0.98,
+                    "dintel-adovelado": 0.98,
+                    "fronton": 0.76,
+                    "fronton-curvo": 0.84,
+                    "fronton-partido": 0.78,
+                    "ojo-de-buey": 0.9,
+                    "pinaculo-gotico": 0.96,
+                    "serliana": 0.88,
+                    "vano-adintelado": 0.9
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Gothic": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.6477281972529768,
+                    "arco-conopial": 0.5541187213344175,
+                    "arco-herradura": 0.12091710007935602,
+                    "arco-lobulado": 0.06015083228973807,
+                    "arco-medio-punto": 0.1511805521012212,
+                    "arco-trilobulado": 0.27011990452669415,
+                    "columna-salomonica": 0.07547973217555072,
+                    "dintel-adovelado": 0.07093911865953129,
+                    "fronton": 0.1577028253868508,
+                    "fronton-curvo": 0.1083581296299786,
+                    "fronton-partido": 0.11056899986874986,
+                    "ojo-de-buey": 0.07938306589238406,
+                    "pinaculo-gotico": 0.3098554678311403,
+                    "serliana": 0.07656667273804647,
+                    "vano-adintelado": 0.09065652549117778
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9634146341463414,
+                    "arco-conopial": 0.7804878048780488,
+                    "arco-herradura": 0.9390243902439024,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.8902439024390244,
+                    "arco-trilobulado": 0.8780487804878049,
+                    "columna-salomonica": 1.0,
+                    "dintel-adovelado": 0.9878048780487805,
+                    "fronton": 0.9024390243902439,
+                    "fronton-curvo": 0.926829268292683,
+                    "fronton-partido": 0.9390243902439024,
+                    "ojo-de-buey": 0.926829268292683,
+                    "pinaculo-gotico": 0.8536585365853658,
+                    "serliana": 1.0,
+                    "vano-adintelado": 0.9512195121951219
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        }
+    },
+    "layer4": {
+        "Hispanic-Muslim": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.12272191147246389,
+                    "arco-conopial": 0.13195554005182325,
+                    "arco-herradura": 0.9068029730257104,
+                    "arco-lobulado": 0.1540712891060313,
+                    "arco-medio-punto": 0.13519768600459414,
+                    "arco-trilobulado": 0.08625525081834487,
+                    "columna-salomonica": 0.09001001379332979,
+                    "dintel-adovelado": 0.456091589490816,
+                    "fronton": 0.10774496742503371,
+                    "fronton-curvo": 0.045517523111371375,
+                    "fronton-partido": 0.03441314775472332,
+                    "ojo-de-buey": 0.06861289729230644,
+                    "pinaculo-gotico": 0.06432972790844678,
+                    "serliana": 0.07555349598491377,
+                    "vano-adintelado": 0.07149933807115479
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9384615384615385,
+                    "arco-conopial": 0.9384615384615385,
+                    "arco-herradura": 0.9230769230769231,
+                    "arco-lobulado": 0.9692307692307692,
+                    "arco-medio-punto": 0.9230769230769231,
+                    "arco-trilobulado": 0.9692307692307692,
+                    "columna-salomonica": 0.9692307692307692,
+                    "dintel-adovelado": 0.8615384615384616,
+                    "fronton": 0.9384615384615385,
+                    "fronton-curvo": 0.9846153846153847,
+                    "fronton-partido": 0.9692307692307692,
+                    "ojo-de-buey": 0.9846153846153847,
+                    "pinaculo-gotico": 1.0,
+                    "serliana": 0.9846153846153847,
+                    "vano-adintelado": 0.9538461538461539
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Baroque": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.08741420558481841,
+                    "arco-conopial": 0.10611090929678411,
+                    "arco-herradura": 0.039512886572108094,
+                    "arco-lobulado": 0.046170846746734634,
+                    "arco-medio-punto": 0.6653089503457403,
+                    "arco-trilobulado": 0.08194724648180617,
+                    "columna-salomonica": 0.22538037622034587,
+                    "dintel-adovelado": 0.05603181722046176,
+                    "fronton": 0.49894511688498455,
+                    "fronton-curvo": 0.2877075510871565,
+                    "fronton-partido": 0.6788788845147005,
+                    "ojo-de-buey": 0.2624471772881682,
+                    "pinaculo-gotico": 0.07053294444449446,
+                    "serliana": 0.11898275043963157,
+                    "vano-adintelado": 0.5961879651165126
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9905660377358491,
+                    "arco-conopial": 0.9339622641509434,
+                    "arco-herradura": 0.9905660377358491,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.8867924528301887,
+                    "arco-trilobulado": 0.9622641509433962,
+                    "columna-salomonica": 0.9528301886792453,
+                    "dintel-adovelado": 0.9811320754716981,
+                    "fronton": 0.7075471698113207,
+                    "fronton-curvo": 0.7358490566037735,
+                    "fronton-partido": 0.8490566037735849,
+                    "ojo-de-buey": 0.8490566037735849,
+                    "pinaculo-gotico": 1.0,
+                    "serliana": 0.9622641509433962,
+                    "vano-adintelado": 0.7924528301886793
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Renaissance": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.1212769745062423,
+                    "arco-conopial": 0.13605294145694155,
+                    "arco-herradura": 0.06578661325258926,
+                    "arco-lobulado": 0.05292900178647256,
+                    "arco-medio-punto": 0.5678714618014142,
+                    "arco-trilobulado": 0.097724947326879,
+                    "columna-salomonica": 0.11097894687554254,
+                    "dintel-adovelado": 0.07050573247083838,
+                    "fronton": 0.5015980406462871,
+                    "fronton-curvo": 0.3168920871260243,
+                    "fronton-partido": 0.24053002885528077,
+                    "ojo-de-buey": 0.3764856763942291,
+                    "pinaculo-gotico": 0.09264124511189417,
+                    "serliana": 0.2699337716212031,
+                    "vano-adintelado": 0.45675250732300815
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.98,
+                    "arco-conopial": 0.92,
+                    "arco-herradura": 1.0,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.86,
+                    "arco-trilobulado": 0.98,
+                    "columna-salomonica": 0.94,
+                    "dintel-adovelado": 1.0,
+                    "fronton": 0.72,
+                    "fronton-curvo": 0.84,
+                    "fronton-partido": 0.8,
+                    "ojo-de-buey": 0.96,
+                    "pinaculo-gotico": 1.0,
+                    "serliana": 0.84,
+                    "vano-adintelado": 0.84
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        },
+        "Gothic": {
+            "probability": {
+                "physical_parts": {
+                    "arco-apuntado": 0.6216589899816007,
+                    "arco-conopial": 0.4803653867608134,
+                    "arco-herradura": 0.10532595700836143,
+                    "arco-lobulado": 0.07235250600749453,
+                    "arco-medio-punto": 0.15687945267392644,
+                    "arco-trilobulado": 0.20491020289677456,
+                    "columna-salomonica": 0.10171128793777523,
+                    "dintel-adovelado": 0.07622950552831365,
+                    "fronton": 0.1404894076413881,
+                    "fronton-curvo": 0.11714640603967015,
+                    "fronton-partido": 0.13372386990145613,
+                    "ojo-de-buey": 0.09906024695396837,
+                    "pinaculo-gotico": 0.2428379910276621,
+                    "serliana": 0.08990528186636834,
+                    "vano-adintelado": 0.12027902815729978
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            },
+            "concept_accuracies": {
+                "physical_parts": {
+                    "arco-apuntado": 0.9146341463414634,
+                    "arco-conopial": 0.8292682926829268,
+                    "arco-herradura": 0.926829268292683,
+                    "arco-lobulado": 1.0,
+                    "arco-medio-punto": 0.8658536585365854,
+                    "arco-trilobulado": 0.9634146341463414,
+                    "columna-salomonica": 0.975609756097561,
+                    "dintel-adovelado": 0.9878048780487805,
+                    "fronton": 0.8780487804878049,
+                    "fronton-curvo": 0.926829268292683,
+                    "fronton-partido": 0.9024390243902439,
+                    "ojo-de-buey": 0.9634146341463414,
+                    "pinaculo-gotico": 0.926829268292683,
+                    "serliana": 0.9634146341463414,
+                    "vano-adintelado": 0.9024390243902439
+                },
+                "color": {},
+                "scene": {},
+                "texture": {},
+                "material": {}
+            }
+        }
+    }
+}
