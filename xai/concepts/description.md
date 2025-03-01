@@ -51,3 +51,10 @@ Slender-Body
 Long-Legs
 Amber-Eyes
 Fluffy-Fur
+
+[physical_parts] monumai:
+['arco-apuntado' 'arco-conopial' 'arco-herradura' 'arco-lobulado'
+ 'arco-medio-punto' 'arco-trilobulado' 'columna-salomonica'
+ 'dintel-adovelado' 'fronton' 'fronton-curvo' 'fronton-partido'
+ 'ojo-de-buey' 'pinaculo-gotico' 'serliana' 'vano-adintelado']
+ 
