@@ -4,6 +4,20 @@ scene: Scene 15 Dataset
 materials: Flickr Material Database (FMD)
 texture: Describable Textures Dataset (DTD) - randomly sampled 15 examples
 
+[physical_parts] cat:
+Furry
+Whiskered
+Pointy-eared
+Slitted-eyed
+Four-legged
+
+[physical_parts] dog:
+Snout
+Wagging-tailed
+Snout-nosed
+Floppy-eared
+Tail-wagging
+
 [physical_parts] husky:
 Thick double coat
 Almond-shaped eyes
