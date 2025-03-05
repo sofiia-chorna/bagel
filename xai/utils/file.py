@@ -8,7 +8,7 @@ import torch
 from xai.utils.logger import logger
 
 
-def save(type: Literal["json", "torch", "pickle"], file_path: str, value: Any):
+def save(type: Literal["json", "torch", "pickle", "plt"], file_path: str, value: Any):
     save_path = Path(file_path)
     save_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -23,6 +23,9 @@ def save(type: Literal["json", "torch", "pickle"], file_path: str, value: Any):
         case "pickle":
             with open(save_path, "wb") as f:
                 pickle.dump(value, f)
+
+        case "plt":
+            value.savefig(save_path, dpi=300)
 
     logger.info(f"Results are saved to {save_path}")
 
