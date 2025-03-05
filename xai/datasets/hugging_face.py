@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List
 
 import torch
 from datasets import Dataset, DatasetDict, load_dataset, load_from_disk
@@ -36,3 +36,6 @@ class HuggingFaceDataset(BaseDataset):
 
     def get_label_mapping(self) -> Callable[[int], str]:
         return self.data.features["label"].int2str
+
+    def get_label_names(self) -> List[str]:
+        return self.data.features["label"].names

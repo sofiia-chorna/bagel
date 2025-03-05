@@ -25,6 +25,7 @@ class DataModule:
             )
             self.num_classes = train_dataset.get_num_classes()
             self.label_mapping = train_dataset.get_label_mapping()
+            self.label_names = train_dataset.get_label_names()
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
 
