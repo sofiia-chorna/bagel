@@ -53,10 +53,19 @@ def confusion_matrix(path: str):
     for model_name in params.models:
         model = get_model(model_name, datamodule.num_classes)
         conf_matrix = get_confusion_matrix(model, datamodule.val_loader)
-        fig = plot_confusion_matrix(conf_matrix, datamodule.label_names, model_name)
+        fig = plot_confusion_matrix(
+            conf_matrix,
+            datamodule.label_names,
+            model_name,
+            rotate_labels=True,
+            abbreviate_names=True,
+            wrap_text=True,
+            figsize=(10, 10),
+            fontsize=18,
+        )
 
         dataset_name = params.dataset_name.split("/")[1]
-        save_path = f"results/confusion_matrix/{model_name}_{dataset_name}.png"
+        save_path = f"results/confusion_matrix/{dataset_name}_{model_name}.png"
         save("plt", save_path, fig)
 
 
