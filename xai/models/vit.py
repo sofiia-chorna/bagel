@@ -27,9 +27,13 @@ class ViT(BaseModel):
 
     def get_layers(self) -> Dict[str, nn.Module]:
         return {
-            "patch_embedding": self.vit.conv_proj,
-            "encoder_layers": self.vit.encoder,
-            "attention_layers": self.vit.encoder.layers,
+            "patch_embed": self.vit.conv_proj,
+            "encoder_block1": self.vit.encoder.layers[0],
+            "encoder_block2": self.vit.encoder.layers[3],
+            "encoder_block3": self.vit.encoder.layers[6],
+            "encoder_block4": self.vit.encoder.layers[9],
+            "encoder_block5": self.vit.encoder.layers[-1],
+            "norm": self.vit.encoder.ln,
         }
 
     def get_name(self) -> str:
