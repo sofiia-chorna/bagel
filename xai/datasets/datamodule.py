@@ -38,7 +38,5 @@ class DataModule:
         self, dataset: Dataset, batch_size: int, shuffle: bool = False
     ) -> DataLoader:
         return DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=shuffle,
+            dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4
         )
