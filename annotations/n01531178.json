@@ -1,0 +1,11 @@
+{
+    "imagenet_category_id": "n01531178",
+    "imagenet_category_name": "goldfinch",
+    "concepts_probs": {
+        "goldfinch head": 1.0,
+        "goldfinch body": 1.0,
+        "goldfinch tail": 0.95,
+        "goldfinch wing": 0.99,
+        "goldfinch paw": 0.96
+    }
+}
