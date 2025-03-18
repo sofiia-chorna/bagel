@@ -12,8 +12,12 @@ class Params:
     models: List[str] = field(default_factory=lambda: ["alexnet"])
     dataset_type: Literal["hugging_face"] = "hugging_face"
     dataset_name: str = "ENSTA-U2IS/Cats_Dogs_Cars"
+    train_features_path: Optional[str] = None
+    val_features_path: Optional[str] = None
     train_concepts_path: Optional[str] = None
     val_concepts_path: Optional[str] = None
+    annotations_path: Optional[str] = None
+    imagenet_path: Optional[str] = None
 
     @classmethod
     def from_yaml(cls, path: str) -> "Params":
