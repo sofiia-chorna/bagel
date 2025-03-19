@@ -4,7 +4,7 @@ import torch
 from datasets import Dataset, load_dataset
 
 from xai.concepts.concept_manager import concept_manager
-from xai.concepts.multilabel_classification import (
+from xai.evaluation.multilabel_classification import (
     run_multilabel_clf,
     run_multilabel_proba,
 )

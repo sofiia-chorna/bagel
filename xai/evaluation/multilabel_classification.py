@@ -14,7 +14,7 @@ from torch import Tensor
 from xai.concepts.concept_manager import concept_manager
 from xai.utils.file import save
 from xai.utils.logger import logger
-from xai.utils.consts import IMAGENET_CLASS_TO_LABEL
+from xai.utils.consts import IMAGENET_LABEL_TO_NAME
 
 
 
@@ -43,7 +43,7 @@ def evaluate(
     y_pred: np.ndarray = classifier.predict(X_test)  # type: ignore
 
     for i, concept in enumerate(concepts):
-        logger.info(f"start predicting proba for {concept} ({i} / {len(concepts)})")
+       # logger.info(f"start predicting proba for {concept} ({i} / {len(concepts)})")
         # calculate average probability
         binary_clf: BaseEstimator = classifier.estimators_[i]
         probs: np.ndarray = binary_clf.predict_proba(X_test)  # type: ignore
@@ -71,7 +71,7 @@ def run_multilabel_clf(
     results = {}
 
     for layer, train_features in train_features_dict.items():
-        if layer in ["layer4"]:
+        if layer in train_features_dict.keys():
             logger.info(f"Processing layer {layer}")
 
             train_df[layer] = list(train_features.numpy())
@@ -118,13 +118,13 @@ def run_multilabel_clf(
                     y_test=y_test_label,
                 )
 
-                save("json", f"results/imagenet/resnet18_{layer}_{label}.json", label_results)
+                #save("json", f"results/imagenet_small/resnet18_{layer}_{label}.json", label_results)
 
-                label_name = IMAGENET_CLASS_TO_LABEL.get(int(label))
+                label_name = IMAGENET_LABEL_TO_NAME.get(int(label))
                 layer_results[label_name] = format_by_category(label_results)
 
             results[layer] = layer_results
-            save("json", f"results/imagenet/resnet18_{layer}.json", layer_results)
+            #save("json", f"results/imagenet_small/resnet18_{layer}.json", layer_results)
 
         logger.info("Completed multilabel classification")
 
