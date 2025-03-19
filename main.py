@@ -14,7 +14,7 @@ from xai.evaluation.confusion_matrix import get_confusion_matrix, plot_confusion
 from xai.feature_extraction.feature_extraction import extract_features
 from xai.models.models import get_model
 from xai.utils.cli import path
-from xai.utils.consts import IMAGENET_CLASS_TO_LABEL, IMAGENET_LABEL_TO_NAME
+from xai.utils.consts import IMAGENET_CLASS_TO_LABEL
 from xai.utils.file import load_json, recursive_list_files, save
 from xai.utils.logger import logger
 from xai.utils.params import Params
@@ -140,7 +140,7 @@ def explain(path: str):
             save("torch", f"features/{base_name}_val.pt", val_features)
 
         if datamodule is None or datamodule.label_mapping is None:
-            label_mapping = IMAGENET_LABEL_TO_NAME.get
+            label_mapping = IMAGENET_CLASS_TO_LABEL.get
         else:
             label_mapping = datamodule.label_mapping
 
@@ -172,8 +172,20 @@ def run_imagenet_experiment(path: str):
     if params.imagenet_path is None:
         raise ValueError("Provide 'imagenet_path' to execute 'run_imagenet_experiment'")
 
+    labels_to_keep = params.imagenet_classes
+
     concepts = []
     class_filepaths = load_json("imagenet_class_filepaths.json")
+
+    if labels_to_keep:
+        labels_to_keep = [str(key) for key in labels_to_keep]
+        class_filepaths = {
+            str(key): value
+            for key, value in class_filepaths.items()
+            if key in labels_to_keep
+        }
+        print("class_filepaths", class_filepaths)
+        print("labels_to_keep", labels_to_keep)
 
     index_counter = 0
     for annotation_file_path in recursive_list_files(params.annotations_path):
@@ -182,17 +194,32 @@ def run_imagenet_experiment(path: str):
         data = load_json(annotation_file_path)
         label = IMAGENET_CLASS_TO_LABEL.get(data["imagenet_category_id"], -1)
 
-        for img_entry in data["images"]:
-            concepts.append(
-                {
-                    "index": index_counter,
-                    "label": int(label),
-                    "concepts": img_entry["categories"],
-                }
-            )
-            index_counter += 1
+        if labels_to_keep is not None and str(label) in labels_to_keep:
+            for img_entry in data["images"]:
+                concepts.append(
+                    {
+                        "index": index_counter,
+                        "label": int(label),
+                        "concepts": img_entry["categories"],
+                        "filename": img_entry["file_name"],
+                    }
+                )
+                index_counter += 1
+        elif labels_to_keep is None:
+            for img_entry in data["images"]:
+                concepts.append(
+                    {
+                        "index": index_counter,
+                        "label": int(label),
+                        "concepts": img_entry["categories"],
+                        "filename": img_entry["file_name"],
+                    }
+                )
+                index_counter += 1
 
-    concepts_df = pd.DataFrame(concepts, columns=["index", "label", "concepts"])
+    concepts_df = pd.DataFrame(
+        concepts, columns=["index", "label", "concepts", "filename"]
+    )
 
     datamodule = ImageNetDataModule(
         params.imagenet_path, class_filepaths, params.batch_size
@@ -215,6 +242,9 @@ def run_imagenet_experiment(path: str):
 
     save("pickle", f"concepts/imagenet/concepts_train.pkl", train_df)
     save("pickle", f"concepts/imagenet/concepts_val.pkl", val_df)
+
+    print("concepts_train.pkl", len(train_df))
+    print("concepts_vak.pkl", len(val_df))
 
 
 if __name__ == "__main__":
