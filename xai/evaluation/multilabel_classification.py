@@ -1,6 +1,5 @@
 from typing import Callable, Dict, List, Set
 
-import joblib
 import numpy as np
 from pandas import DataFrame
 from sklearn.base import BaseEstimator
@@ -14,8 +13,6 @@ from torch import Tensor
 from xai.concepts.concept_manager import concept_manager
 from xai.utils.file import save
 from xai.utils.logger import logger
-from xai.utils.consts import IMAGENET_LABEL_TO_NAME
-
 
 
 def get_multilabel_binarizer(df: DataFrame) -> MultiLabelBinarizer:
@@ -43,7 +40,7 @@ def evaluate(
     y_pred: np.ndarray = classifier.predict(X_test)  # type: ignore
 
     for i, concept in enumerate(concepts):
-       # logger.info(f"start predicting proba for {concept} ({i} / {len(concepts)})")
+        # logger.info(f"start predicting proba for {concept} ({i} / {len(concepts)})")
         # calculate average probability
         binary_clf: BaseEstimator = classifier.estimators_[i]
         probs: np.ndarray = binary_clf.predict_proba(X_test)  # type: ignore
@@ -92,21 +89,27 @@ def run_multilabel_clf(
             classifier = MultiOutputClassifier(
                 OneVsRestClassifier(
                     LogisticRegression(
-                        solver="liblinear", class_weight="balanced", max_iter=1000, C=0.1
+                        solver="liblinear",
+                        class_weight="balanced",
+                        max_iter=1000,
+                        C=0.1,
                     )
                 ),
-                n_jobs=-1
+                n_jobs=-1,
             )
             classifier.fit(X_train_scaled, y_train)
             logger.info("Classifier is trained")
 
-            joblib.dump(classifier, f"classifier_checkpoint_layer_{layer}.pkl")
-            joblib.dump(scaler, f"scaler_checkpoint_layer_{layer}.pkl")
+            save(
+                "pickle",
+                f"checkpoints/classifier_checkpoint_layer_{layer}.pkl",
+                classifier,
+            )
+            save("pickle", f"checkpoints/scaler_checkpoint_layer_{layer}.pkl", scaler)
 
             layer_results = {}
             for label, group in val_df.groupby("label", sort=False):
                 X_test_label = np.array(group[layer].tolist())
-
                 X_test_label = scaler.transform(X_test_label)
 
                 y_test_label = mlb.transform(group["concepts"].tolist())
@@ -118,13 +121,17 @@ def run_multilabel_clf(
                     y_test=y_test_label,
                 )
 
-                #save("json", f"results/imagenet_small/resnet18_{layer}_{label}.json", label_results)
+                save(
+                    "json",
+                    f"results/imagenet/{layer}/resnet18_{layer}_{label}.json",
+                    label_results,
+                )
 
-                label_name = IMAGENET_LABEL_TO_NAME.get(int(label))
+                label_name = label_mapping(int(label))
                 layer_results[label_name] = format_by_category(label_results)
 
             results[layer] = layer_results
-            #save("json", f"results/imagenet_small/resnet18_{layer}.json", layer_results)
+            save("json", f"results/imagenet/resnet18_{layer}.json", layer_results)
 
         logger.info("Completed multilabel classification")
 
@@ -151,7 +158,7 @@ def run_multilabel_proba(
 
     X_train = np.array(train_df[layer].to_list())
     y_train = mlb.transform(train_df["concepts"].tolist())
-    
+
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
 
@@ -162,7 +169,7 @@ def run_multilabel_proba(
                 class_weight="balanced",
                 max_iter=1000,
                 C=0.1,
-                n_jobs=-1
+                n_jobs=-1,
             )
         )
     )
@@ -178,14 +185,14 @@ def run_multilabel_proba(
 
         # calculate probability
         for i, concept in enumerate(mlb.classes_):
-                binary_clf: BaseEstimator = classifier.estimators_[i]
-                probs: np.ndarray = binary_clf.predict_proba(X_test_label)  # type: ignore
-                concept_avg_probabilities[concept] = probs[:, 1].tolist()
+            binary_clf: BaseEstimator = classifier.estimators_[i]
+            probs: np.ndarray = binary_clf.predict_proba(X_test_label)  # type: ignore
+            concept_avg_probabilities[concept] = probs[:, 1].tolist()
 
-                label_name = label_mapping(int(label))
-                layer_results[label_name] = {
-                    "probability": concept_avg_probabilities,
-                }
+            label_name = label_mapping(int(label))
+            layer_results[label_name] = {
+                "probability": concept_avg_probabilities,
+            }
 
     results[layer] = layer_results
 
@@ -194,7 +201,9 @@ def run_multilabel_proba(
     return results
 
 
-def format_by_category(label_results: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+def format_by_category(
+    label_results: Dict[str, Dict[str, float]],
+) -> Dict[str, Dict[str, float]]:
     category_results = {
         "probability": {},
         "concept_accuracies": {},
@@ -256,7 +265,9 @@ def run_multilabel_clf_by_class(
 
             # Evaluate per category
             X_test_label = np.array(val_df[val_df["label"] == label][layer].tolist())
-            y_test_label = mlb.transform(val_df[val_df["label"] == label]["concepts"].tolist())
+            y_test_label = mlb.transform(
+                val_df[val_df["label"] == label]["concepts"].tolist()
+            )
 
             X_test_label = scaler.transform(X_test_label)
 
@@ -266,7 +277,7 @@ def run_multilabel_clf_by_class(
                 X_test=X_test_label,
                 y_test=y_test_label,
             )
-    
+
             label_name = label_mapping(int(label))
             layer_results[label_name] = format_by_category(label_results)
 
