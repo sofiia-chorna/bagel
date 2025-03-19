@@ -2,7 +2,7 @@ import json
 import os
 import pickle
 from pathlib import Path
-from typing import Any, Dict, Literal
+from typing import Any, Dict, List, Literal
 
 import torch
 
@@ -36,10 +36,12 @@ def load_json(file_path: str) -> Dict[str, Any]:
         return json.load(f)
 
 
-def recursive_list_files(path: str):
+def recursive_list_files(directory: str) -> List[str]:
     """
     Recursively yield the file paths in a directory.
     """
-    for root, _, files in os.walk(path):
+    file_paths = []
+    for root, _dirs, files in os.walk(directory):
         for file in files:
-            yield os.path.join(root, file)
+            file_paths.append(os.path.join(root, file))
+    return file_paths
