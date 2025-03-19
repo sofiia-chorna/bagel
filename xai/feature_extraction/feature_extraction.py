@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple
 
 import torch
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from torch import Tensor, nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -23,6 +24,9 @@ def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
 
     extracted_features: Dict[str, List[Tensor]] = {layer: [] for layer in layers}
 
+    all_preds = []
+    all_labels = []
+
     def hook_fn(module: nn.Module, _input: Tuple[Tensor, ...], output: Tensor) -> None:
         pooled_output = global_pool(output).view(output.size(0), -1)
         extracted_features[str(module.name)].append(pooled_output.detach().cpu())
@@ -34,9 +38,15 @@ def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
         hooks.append(hook)
 
     with torch.no_grad():
-        for images, _ in tqdm(loader):
+        for images, labels in tqdm(loader):
             images = images.to(DEVICE)
-            _ = model(images)
+            labels = labels.to(DEVICE)
+
+            outputs = model(images)
+            preds = outputs.argmax(dim=1).cpu().numpy()
+
+            all_preds.extend(preds)
+            all_labels.extend(labels.cpu().numpy())
 
     for hook in hooks:
         hook.remove()
@@ -45,6 +55,31 @@ def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
         key: torch.cat(features, dim=0) for key, features in extracted_features.items()
     }
 
-    logger.info(f"End extracting features")
+    # compute performance metrics
+    accuracy = accuracy_score(all_labels, all_preds)
+    precision = precision_score(
+        all_labels, all_preds, average="weighted", zero_division=0
+    )
+    recall = recall_score(all_labels, all_preds, average="weighted", zero_division=0)
+    f1 = f1_score(all_labels, all_preds, average="weighted", zero_division=0)
+
+    logger.info(
+        f"End extracting features with accuracy: {accuracy:.4f}, precision: {precision:.4f}, recall: {recall:.4f}, f1-score: {f1:.4f}"
+    )
+
+    # save
+    metrics = {
+        "accuracy": accuracy,
+        "precision": precision,
+        "recall": recall,
+        "f1_score": f1,
+    }
+
+    save("json", f"results/{model.get_name()}.json", metrics)
+
+    # convert lists to tensors
+    final_features: Dict[str, Tensor] = {
+        key: torch.cat(features, dim=0) for key, features in extracted_features.items()
+    }
 
     return final_features
