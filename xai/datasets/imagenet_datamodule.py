@@ -35,12 +35,8 @@ class ImageNetDataModule:
         self.train_dataset = torch.utils.data.Subset(full_dataset, train_indices)
         self.val_dataset = torch.utils.data.Subset(full_dataset, val_indices)
 
-        self.train_loader = self._get_dataloader(
-            self.train_dataset, batch_size, shuffle=True
-        )
-        self.val_loader = self._get_dataloader(
-            self.val_dataset, batch_size, shuffle=False
-        )
+        self.train_loader = self._get_dataloader(self.train_dataset, batch_size)
+        self.val_loader = self._get_dataloader(self.val_dataset, batch_size)
 
         self.num_classes = self.get_num_classes()
         self.label_mapping = self.get_label_mapping()
