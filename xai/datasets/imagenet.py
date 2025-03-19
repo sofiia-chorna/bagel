@@ -47,7 +47,7 @@ class ImageNetDataset(BaseDataset):
 
     def __getitem__(self, index: int) -> Tuple[Tensor, Tensor]:
         image, label = self.data[index]
-        return image, torch.tensor(label, dtype=torch.long)
+        return image, torch.tensor(int(label), dtype=torch.long)
 
     def get_num_classes(self) -> int:
         return len(self.data.classes) if isinstance(self.data, ImageFolder) else 1
