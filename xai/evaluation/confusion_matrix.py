@@ -1,6 +1,6 @@
 import os
 import textwrap
-from typing import Any, List, Optional, Sequence
+from typing import Any, List, Optional, Sequence, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -37,58 +37,67 @@ std = [0.229, 0.224, 0.225]  # ImageNet std
 def get_confusion_matrix(
     model: BaseModel,
     dataloader: DataLoader,
-    class_names: Optional[List[str]] = [],
+    class_names: Optional[List[str]] = None,
     save_dir: Optional[str] = None,
-) -> ndarray[Any, Any]:
+) -> np.ndarray:
     model.to(DEVICE)
-
     model.eval()
-    all_preds = []
-    all_labels = []
-    misclassified = []
 
-    first_batch_processed = False
+    all_preds, all_labels, misclassified = [], [], []
+    first_batch_logged = False
 
     with torch.no_grad():
         for images, labels in tqdm(dataloader):
             images, labels = images.to(DEVICE), labels.to(DEVICE)
-
             outputs = model(images)
+            preds = torch.argmax(outputs, dim=1)
 
-            _, preds = torch.max(outputs, 1)
             all_preds.extend(preds.cpu().numpy())
             all_labels.extend(labels.cpu().numpy())
 
-            if not first_batch_processed:
-                print("gt", labels.cpu().numpy()[0], type(labels.cpu().numpy()[0]))
-                print("pred", preds.cpu().numpy()[0], type(preds.cpu().numpy()[0]))
+            if not first_batch_logged:
+                log_first_batch_details(images, labels, preds, class_names)
+                first_batch_logged = True
 
-                print("First Batch Details:")
-                print(
-                    f"Images shape: {images.shape}"
-                )  # should be [batch_size, channels, height, width]
-                print(f"Ground Truth Labels: {labels.cpu().numpy()}")
-                print(f"Predicted Labels: {preds.cpu().numpy()}")
-
-                if class_names:
-                    print("Ground Truth Class Names:")
-                    print([class_names[label] for label in labels.cpu().numpy()])
-                    print("Predicted Class Names:")
-                    print([class_names[pred] for pred in preds.cpu().numpy()])
-
-                first_batch_processed = True
-
-            if save_dir is not None:
-                # find misclassified samples
-                for i in range(len(labels)):
-                    if preds[i] != labels[i]:  # prediction is wrong
-                        misclassified.append(
-                            (images[i].cpu(), labels[i].cpu(), preds[i].cpu())
-                        )
+            if save_dir:
+                misclassified.extend(
+                    [
+                        (images[i].cpu(), labels[i].cpu(), preds[i].cpu())
+                        for i in range(len(labels))
+                        if preds[i] != labels[i]
+                    ]
+                )
 
     conf_matrix = confusion_matrix(all_labels, all_preds)
+    log_and_save_metrics(model, all_labels, all_preds)
 
-    # compute classification metrics
+    if save_dir:
+        save_misclassified_images(misclassified, save_dir, class_names)
+
+    return conf_matrix
+
+
+def log_first_batch_details(
+    images: torch.Tensor,
+    labels: torch.Tensor,
+    preds: torch.Tensor,
+    class_names: Optional[List[str]],
+) -> None:
+    labels_np, preds_np = labels.cpu().numpy(), preds.cpu().numpy()
+    logger.info(f"First Batch - Images shape: {images.shape}")
+    logger.info(f"Ground Truth Labels: {labels_np}")
+    logger.info(f"Predicted Labels: {preds_np}")
+
+    if class_names:
+        gt_classes = [class_names[label] for label in labels_np]
+        pred_classes = [class_names[pred] for pred in preds_np]
+        logger.info(f"Ground Truth Class Names: {gt_classes}")
+        logger.info(f"Predicted Class Names: {pred_classes}")
+
+
+def log_and_save_metrics(
+    model: BaseModel, all_labels: List[int], all_preds: List[int]
+) -> None:
     accuracy = accuracy_score(all_labels, all_preds)
     precision = precision_score(all_labels, all_preds, average="weighted")
     recall = recall_score(all_labels, all_preds, average="weighted")
@@ -99,8 +108,8 @@ def get_confusion_matrix(
     logger.info(f"Recall: {recall:.4f}")
     logger.info(f"F1 Score: {f1:.4f}")
 
-    # save metrics to a file
     metrics_path = f"results/{model.get_name()}_metrics.txt"
+    os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
     with open(metrics_path, "w") as f:
         f.write(f"Accuracy: {accuracy:.4f}\n")
         f.write(f"Precision: {precision:.4f}\n")
@@ -109,22 +118,24 @@ def get_confusion_matrix(
 
     logger.info(f"Saved metrics in {metrics_path}")
 
-    if save_dir is not None:
-        os.makedirs(save_dir, exist_ok=True)
-        for idx, (img, true_label, pred_label) in enumerate(misclassified[:100]):
-            img = denormalize(img, mean, std)
-            img = torch.clamp(img, 0, 1)
 
-            img_pil = transforms.ToPILImage()(img)
-            img_pil.save(
-                os.path.join(
-                    save_dir,
-                    f"misclassified_{idx}_true_{class_names[true_label]}_pred_{class_names[pred_label]}.png",
-                )
+def save_misclassified_images(
+    misclassified: List[Tuple[torch.Tensor, int, int]],
+    save_dir: str,
+    class_names: Optional[List[str]],
+) -> None:
+    os.makedirs(save_dir, exist_ok=True)
+    for idx, (img, true_label, pred_label) in enumerate(misclassified[:100]):
+        img = denormalize(img, mean, std)
+        img = torch.clamp(img, 0, 1)
+        img_pil = transforms.ToPILImage()(img)
+        img_pil.save(
+            os.path.join(
+                save_dir,
+                f"misclassified_{idx}_true_{class_names[true_label]}_pred_{class_names[pred_label]}.png",
             )
-        logger.info(f"Saved {len(misclassified)} misclassified images in '{save_dir}'")
-
-    return conf_matrix
+        )
+    logger.info(f"Saved {len(misclassified)} misclassified images in '{save_dir}'")
 
 
 def plot_confusion_matrix(
