@@ -4,18 +4,16 @@ import torch
 from datasets import Dataset, load_dataset
 
 from xai.concepts.concept_manager import concept_manager
-from xai.evaluation.multilabel_classification import (
-    run_multilabel_clf,
-    run_multilabel_proba,
-)
+from xai.data_processing.annotations import filter_class_filepaths, process_annotations
 from xai.datasets.datamodule import DataModule
 from xai.datasets.imagenet_datamodule import ImageNetDataModule
 from xai.evaluation.confusion_matrix import get_confusion_matrix, plot_confusion_matrix
+from xai.evaluation.multilabel_classification import run_multilabel_clf
 from xai.feature_extraction.feature_extraction import extract_features
 from xai.models.models import get_model
 from xai.utils.cli import path
 from xai.utils.consts import IMAGENET_CLASS_TO_LABEL
-from xai.utils.file import load_json, recursive_list_files, save
+from xai.utils.file import load_json, save
 from xai.utils.logger import logger
 from xai.utils.params import Params
 
@@ -144,7 +142,6 @@ def explain(path: str):
         else:
             label_mapping = datamodule.label_mapping
 
-        #       results = run_multilabel_proba(
         results = run_multilabel_clf(
             train_df=train_concepts_df,
             val_df=val_concepts_df,
@@ -172,51 +169,14 @@ def run_imagenet_experiment(path: str):
     if params.imagenet_path is None:
         raise ValueError("Provide 'imagenet_path' to execute 'run_imagenet_experiment'")
 
-    labels_to_keep = params.imagenet_classes
+    labels_to_keep = (
+        [str(key) for key in params.imagenet_classes]
+        if params.imagenet_classes
+        else None
+    )
 
-    concepts = []
-    class_filepaths = load_json("imagenet_class_filepaths.json")
-
-    if labels_to_keep:
-        labels_to_keep = [str(key) for key in labels_to_keep]
-        class_filepaths = {
-            str(key): value
-            for key, value in class_filepaths.items()
-            if key in labels_to_keep
-        }
-        print("class_filepaths", class_filepaths)
-        print("labels_to_keep", labels_to_keep)
-
-    index_counter = 0
-    for annotation_file_path in recursive_list_files(params.annotations_path):
-        logger.info(f"Processing {annotation_file_path} ...")
-
-        data = load_json(annotation_file_path)
-        label = IMAGENET_CLASS_TO_LABEL.get(data["imagenet_category_id"], -1)
-
-        if labels_to_keep is not None and str(label) in labels_to_keep:
-            for img_entry in data["images"]:
-                concepts.append(
-                    {
-                        "index": index_counter,
-                        "label": int(label),
-                        "concepts": img_entry["categories"],
-                        "filename": img_entry["file_name"],
-                    }
-                )
-                index_counter += 1
-        elif labels_to_keep is None:
-            for img_entry in data["images"]:
-                concepts.append(
-                    {
-                        "index": index_counter,
-                        "label": int(label),
-                        "concepts": img_entry["categories"],
-                        "filename": img_entry["file_name"],
-                    }
-                )
-                index_counter += 1
-
+    class_filepaths = filter_class_filepaths(labels_to_keep)
+    concepts = process_annotations(params.annotations_path, labels_to_keep)
     concepts_df = pd.DataFrame(
         concepts, columns=["index", "label", "concepts", "filename"]
     )
