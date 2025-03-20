@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set
+from typing import Callable, Dict, List
 
 import numpy as np
 from pandas import DataFrame
@@ -16,10 +16,7 @@ from xai.utils.logger import logger
 
 
 def get_multilabel_binarizer(df: DataFrame) -> MultiLabelBinarizer:
-    all_concepts: Set[str] = set()
-
-    for concepts in df["concepts"]:
-        all_concepts.update(concepts)
+    all_concepts = df["concepts"].explode().unique()
 
     mlb = MultiLabelBinarizer()
     mlb.fit([list(all_concepts)])
