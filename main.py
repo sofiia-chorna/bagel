@@ -5,14 +5,14 @@ from datasets import Dataset, load_dataset
 
 from xai.concepts.concept_manager import concept_manager
 from xai.data_processing.annotations import filter_class_filepaths, process_annotations
-from xai.datasets.datamodule import DataModule
+from xai.datasets.datamodule import HuggingFaceDataModule
 from xai.datasets.imagenet_datamodule import ImageNetDataModule
 from xai.evaluation.confusion_matrix import get_confusion_matrix, plot_confusion_matrix
 from xai.evaluation.multilabel_classification import run_multilabel_clf
 from xai.feature_extraction.feature_extraction import extract_features
 from xai.models.models import get_model
 from xai.utils.cli import path
-from xai.utils.consts import IMAGENET_CLASS_TO_LABEL
+from xai.utils.consts import IMAGENET_LABEL_TO_NAME
 from xai.utils.file import load_json, save
 from xai.utils.logger import logger
 from xai.utils.params import Params
@@ -63,7 +63,7 @@ def confusion_matrix(path: str):
         )
         datamodule.check_multiple_batches(loader_type="val")
     else:
-        datamodule = DataModule(
+        datamodule = HuggingFaceDataModule(
             params.dataset_type, params.dataset_name, params.batch_size
         )
 
@@ -123,7 +123,7 @@ def explain(path: str):
             datamodule = None
         else:
             # dataloaders
-            datamodule = DataModule(
+            datamodule = HuggingFaceDataModule(
                 params.dataset_type, params.dataset_name, params.batch_size
             )
 
@@ -138,7 +138,7 @@ def explain(path: str):
             save("torch", f"features/{base_name}_val.pt", val_features)
 
         if datamodule is None or datamodule.label_mapping is None:
-            label_mapping = IMAGENET_CLASS_TO_LABEL.get
+            label_mapping = IMAGENET_LABEL_TO_NAME.get
         else:
             label_mapping = datamodule.label_mapping
 
@@ -205,6 +205,38 @@ def run_imagenet_experiment(path: str):
 
     print("concepts_train.pkl", len(train_df))
     print("concepts_vak.pkl", len(val_df))
+
+
+@main.command()
+@path
+def get_dataset_bias(path: str):
+    logger.info(f"Running 'get_dataset_biais'")
+
+    params = Params.from_yaml(path)
+    logger.info(f"Params used: {params.to_json()}")
+
+    if params.val_concepts_path is None:
+        raise ValueError("Provide 'val_concepts_path' param to run 'get-dataset-biais'")
+    if params.dataset_type is None or params.dataset_name is None:
+        raise ValueError(
+            "Provide 'dataset_type' and 'dataset_name' params to run 'get-dataset-biais'"
+        )
+
+    val_annotated_df = concept_manager.load(params.val_concepts_path)
+
+    if params.dataset_type == "hugging_face":
+        datamodule = HuggingFaceDataModule(params.dataset_name, params.batch_size)
+    else:
+        class_filepaths = filter_class_filepaths()
+        datamodule = ImageNetDataModule(
+            params.imagenet_path, class_filepaths, params.batch_size
+        )
+
+    dataset_bias = concept_manager.calculate_bias(
+        dataframe=val_annotated_df, label_mapping=datamodule.label_mapping
+    )
+
+    save("json", f"results/dataset_biases/{params.dataset_name}.json", dataset_bias)
 
 
 if __name__ == "__main__":
