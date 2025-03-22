@@ -1,5 +1,6 @@
 import pickle
-from typing import Dict, List
+from collections import Counter
+from typing import Callable, Dict, List
 
 import pandas as pd
 from datasets import Dataset
@@ -19,7 +20,7 @@ class Concept_Manager:
         "abstract": "Is the concept of {concept} associated with this object?",
         "physical_parts": "Does this object visibly have {concept}?",
         "scene": "Is this object in a {concept} setting?",
-        "material": "Is this object made of {concept}?"
+        "material": "Is this object made of {concept}?",
     }
 
     def __init__(self):
@@ -123,9 +124,50 @@ class Concept_Manager:
         ]
 
         return answers
-    
+
     def get_concept_categories(self) -> List[str]:
         return list(self.all_concepts.keys())
+
+    def calculate_concept_probabilities(self, df: pd.DataFrame) -> dict:
+        """Calculates concept probabilities for the dataset"""
+        logger.info("Calculating concept probabilities...")
+
+        all_concepts = [concept for concepts in df["concepts"] for concept in concepts]
+        concept_counts = Counter(all_concepts)
+
+        total_images = len(df)
+        logger.debug(f"Total images: {total_images}")
+
+        # P(concept) = (n of images with this concept) / (total n of images)
+        probabilities = {
+            concept: count / total_images for concept, count in concept_counts.items()
+        }
+        logger.debug(f"Concept probabilities: {probabilities}")
+
+        category_probabilities = {}
+
+        # sort by categories
+        for category, concepts in self.all_concepts.items():
+          category_concepts = [concept for concept in concepts if concept in concept_counts]
+          category_probabilities[category] = {concept: probabilities.get(concept, 0) for concept in category_concepts}
+
+        logger.info(f"Category probabilities calculated: {category_probabilities}")
+        return category_probabilities
+    
+    def calculate_bias(self, dataframe: pd.DataFrame, label_mapping: Callable[[int], str]) -> Dict:
+        logger.info("Calculating bias...")
+        
+        dataset_bias = {}
+    
+        for label in dataframe["label"].unique():
+            df = dataframe[dataframe["label"] == label]
+            name = label_mapping(int(label))
+            dataset_bias[name] = self.calculate_concept_probabilities(df)
+
+            logger.info(f"Bias for {name}: {dataset_bias}")
+
+        return dataset_bias
+
 
 # singleton
 concept_manager = Concept_Manager()

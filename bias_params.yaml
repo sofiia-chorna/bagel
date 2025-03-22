@@ -1,0 +1,4 @@
+batch_size: 64
+dataset_type: "hugging_face"
+dataset_name: "ENSTA-U2IS/HuskyVsWolf"
+val_concepts_path: "concepts/ENSTA-U2IS_all/HuskyVsWolf_val.pkl"
