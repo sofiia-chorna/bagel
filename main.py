@@ -63,9 +63,7 @@ def confusion_matrix(path: str):
         )
         datamodule.check_multiple_batches(loader_type="val")
     else:
-        datamodule = HuggingFaceDataModule(
-            params.dataset_type, params.dataset_name, params.batch_size
-        )
+        datamodule = HuggingFaceDataModule(params.dataset_name, params.batch_size)
 
     # calculate
     for model_name in params.models:
@@ -123,19 +121,18 @@ def explain(path: str):
             datamodule = None
         else:
             # dataloaders
-            datamodule = HuggingFaceDataModule(
-                params.dataset_type, params.dataset_name, params.batch_size
-            )
+            datamodule = HuggingFaceDataModule(params.dataset_name, params.batch_size)
 
             logger.info(f"Calculating features for {model_name}")
             model = get_model(model_name, datamodule.num_classes)
 
-            train_features = extract_features(model, datamodule.train_loader)
-            val_features = extract_features(model, datamodule.val_loader)
+            train_features, _ = extract_features(model, datamodule.train_loader)
+            val_features, metrics = extract_features(model, datamodule.val_loader)
 
             base_name = f"{params.dataset_name}_{model_name}"
             save("torch", f"features/{base_name}_train.pt", train_features)
             save("torch", f"features/{base_name}_val.pt", val_features)
+            save("json", f"results/performances/{base_name}.json", metrics)
 
         if datamodule is None or datamodule.label_mapping is None:
             label_mapping = IMAGENET_LABEL_TO_NAME.get
@@ -150,8 +147,9 @@ def explain(path: str):
             label_mapping=label_mapping,
         )
 
-        base_name = f"{params.dataset_name}_{model_name}"
-        save("json", f"results/imagenet/{base_name}.json", results)
+        dataset_name = params.dataset_name.replace("ENSTA-U2IS/", "")
+        base_name = f"{dataset_name}_{model_name}"
+        save("json", f"results/{dataset_name}/{base_name}.json", results)
 
 
 @main.command()
@@ -237,6 +235,27 @@ def get_dataset_bias(path: str):
     )
 
     save("json", f"results/dataset_biases/{params.dataset_name}.json", dataset_bias)
+
+
+@main.command()
+@path
+def get_final_result(path: str):
+    logger.info(f"Running 'get_final_result'")
+
+    params = Params.from_yaml(path)
+    logger.info(f"Params used: {params.to_json()}")
+
+    for model_name in params.models:
+        result = {}
+
+        dataset_name = params.dataset_name.replace("ENSTA-U2IS/", "")
+        base_name = f"{dataset_name}_{model_name}"
+
+        result["dataset"] = load_json("results/dataset_biases/{dataset_name}.json")
+        result["neural_network"] = load_json("results/husky_vs_wolf/{base_name}.json")
+        result["performance"] = load_json(f"results/performances/{base_name}.json")
+
+        save("json", f"total_results/{dataset_name}_{model_name}.json", result)
 
 
 if __name__ == "__main__":

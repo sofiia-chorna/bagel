@@ -12,7 +12,9 @@ from xai.utils.file import save
 from xai.utils.logger import logger
 
 
-def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
+def extract_features(
+    model: BaseModel, loader: DataLoader
+) -> Tuple[Dict[str, Tensor], Dict[str, float]]:
     logger.info("Start extracting features")
 
     model.to(DEVICE)
@@ -66,8 +68,6 @@ def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
     logger.info(
         f"End extracting features with accuracy: {accuracy:.4f}, precision: {precision:.4f}, recall: {recall:.4f}, f1-score: {f1:.4f}"
     )
-
-    # save
     metrics = {
         "accuracy": accuracy,
         "precision": precision,
@@ -75,11 +75,4 @@ def extract_features(model: BaseModel, loader: DataLoader) -> Dict[str, Tensor]:
         "f1_score": f1,
     }
 
-    save("json", f"results/{model.get_name()}.json", metrics)
-
-    # convert lists to tensors
-    final_features: Dict[str, Tensor] = {
-        key: torch.cat(features, dim=0) for key, features in extracted_features.items()
-    }
-
-    return final_features
+    return final_features, metrics
