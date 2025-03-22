@@ -44,11 +44,11 @@ class DenseNet(BaseModel):
 
     def get_layers(self) -> Dict[str, nn.Module]:
         return {
-            "conv0": self.densenet.conv0,
-            "denseblock1": self.densenet.denseblock1[-1],  # type: ignore
-            "denseblock2": self.densenet.denseblock2[-1],  # type: ignore
-            "denseblock3": self.densenet.denseblock3[-1],  # type: ignore
-            "denseblock4": self.densenet.denseblock4[-1],  # type: ignore
+            "conv0": self.densenet.features.conv0,  # type: ignore
+            "denseblock1": self.densenet.features.denseblock1[-1],  # type: ignore
+            "denseblock2": self.densenet.features.denseblock2[-1],  # type: ignore
+            "denseblock3": self.densenet.features.denseblock3[-1],  # type: ignore
+            "denseblock4": self.densenet.features.denseblock4[-1],  # type: ignore
         }
 
     def get_name(self) -> str:
