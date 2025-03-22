@@ -34,7 +34,9 @@ def process_annotations(
     return concepts
 
 
-def filter_class_filepaths(labels_to_keep: Optional[List[str]]) -> Dict[str, str]:
+def filter_class_filepaths(
+    labels_to_keep: Optional[List[str]] = None,
+) -> Dict[str, str]:
     class_filepaths = load_json("xai/data_processing/imagenet_class_filepaths.json")
     if labels_to_keep:
         return {
