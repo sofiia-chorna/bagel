@@ -1,8 +1,9 @@
 from xai.models.alexnet import AlexNet
+from xai.models.densenet import DenseNet
+from xai.models.efficientnet import EfficientNet
 from xai.models.resnet18 import ResNet18
 from xai.models.vgg16 import VGG16
 from xai.models.vit import ViT
-from xai.models.densenet import DenseNet
 from xai.utils.logger import logger
 
 
@@ -27,6 +28,9 @@ def get_model(model_name: str, num_classes: int):
 
         case "densenet169":
             return DenseNet(num_classes, type="densenet169")
+
+        case "efficientnet":
+            return EfficientNet(num_classes)
 
         case _:
             raise ValueError(f"'{model_name}' no such model available")
