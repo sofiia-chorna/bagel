@@ -4,6 +4,10 @@ from xai.models.efficientnet import EfficientNet
 from xai.models.resnet18 import ResNet18
 from xai.models.vgg16 import VGG16
 from xai.models.vit import ViT
+from xai.models.inceptionv3 import InceptionV3
+from xai.models.googlelenet import GoogLeNet
+from xai.models.resnext import ResNeXt
+
 from xai.utils.logger import logger
 
 
@@ -31,6 +35,18 @@ def get_model(model_name: str, num_classes: int):
 
         case "efficientnet":
             return EfficientNet(num_classes)
+
+        case "inceptionv3":
+            return InceptionV3(num_classes)
+
+        case "googlelenet":
+            return GoogLeNet(num_classes)
+
+        case "resnext50":
+            return ResNeXt(num_classes, type="resnext50")
+
+        case "resnext101":
+            return ResNeXt(num_classes, type="resnext101")
 
         case _:
             raise ValueError(f"'{model_name}' no such model available")
