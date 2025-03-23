@@ -186,11 +186,14 @@ def run_imagenet_experiment(path: str):
     for model_name in params.models:
         model = get_model(model_name, datamodule.num_classes)
 
-        train_features = extract_features(model, datamodule.train_loader)
-        val_features = extract_features(model, datamodule.val_loader)
+        train_features, _ = extract_features(model, datamodule.train_loader)
+        val_features, metrics = extract_features(model, datamodule.val_loader)
 
         save("torch", f"features/imagenet/{model_name}_train.pt", train_features)
         save("torch", f"features/imagenet/{model_name}_val.pt", val_features)
+
+        base_name = f"{params.dataset_name}_{model_name}"
+        save("json", f"results/performances/{base_name}.json", metrics)
 
     train_indices = set(datamodule.train_dataset.indices)
     val_indices = set(datamodule.val_dataset.indices)
