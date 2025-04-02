@@ -9,7 +9,7 @@ from xai.datasets.datamodule import HuggingFaceDataModule
 from xai.datasets.imagenet_datamodule import ImageNetDataModule
 from xai.evaluation.confusion_matrix import get_confusion_matrix, plot_confusion_matrix
 from xai.evaluation.multilabel_classification import run_multilabel_clf
-from xai.feature_extraction.feature_extraction import extract_features
+from xai.model_operations.feature_extraction import extract_features
 from xai.models.models import get_model
 from xai.utils.cli import path
 from xai.utils.consts import IMAGENET_LABEL_TO_NAME
@@ -189,8 +189,8 @@ def run_imagenet_experiment(path: str):
         train_features, _ = extract_features(model, datamodule.train_loader)
         val_features, metrics = extract_features(model, datamodule.val_loader)
 
-        save("torch", f"features/imagenet/{model_name}_train.pt", train_features)
-        save("torch", f"features/imagenet/{model_name}_val.pt", val_features)
+        # save("torch", f"features/imagenet/{model_name}_train.pt", train_features)
+        # save("torch", f"features/imagenet/{model_name}_val.pt", val_features)
 
         base_name = f"{params.dataset_name}_{model_name}"
         save("json", f"results/performances/{base_name}.json", metrics)
@@ -201,8 +201,8 @@ def run_imagenet_experiment(path: str):
     train_df = concepts_df[concepts_df["index"].isin(train_indices)]
     val_df = concepts_df[concepts_df["index"].isin(val_indices)]
 
-    save("pickle", f"concepts/imagenet/concepts_train.pkl", train_df)
-    save("pickle", f"concepts/imagenet/concepts_val.pkl", val_df)
+    # save("pickle", f"concepts/imagenet/concepts_train.pkl", train_df)
+    # save("pickle", f"concepts/imagenet/concepts_val.pkl", val_df)
 
     print("concepts_train.pkl", len(train_df))
     print("concepts_vak.pkl", len(val_df))
@@ -254,8 +254,8 @@ def get_final_result(path: str):
         dataset_name = params.dataset_name.replace("ENSTA-U2IS/", "")
         base_name = f"{dataset_name}_{model_name}"
 
-        result["dataset"] = load_json("results/dataset_biases/{dataset_name}.json")
-        result["neural_network"] = load_json("results/husky_vs_wolf/{base_name}.json")
+        result["dataset"] = load_json(f"results/dataset_biases/{dataset_name}.json")
+        result["neural_network"] = load_json(f"results/{dataset_name}/{base_name}.json")
         result["performance"] = load_json(f"results/performances/{base_name}.json")
 
         save("json", f"total_results/{dataset_name}_{model_name}.json", result)
