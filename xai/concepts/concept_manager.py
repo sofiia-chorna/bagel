@@ -129,42 +129,39 @@ class Concept_Manager:
         return list(self.all_concepts.keys())
 
     def calculate_concept_probabilities(self, df: pd.DataFrame) -> dict:
-        """Calculates concept probabilities for the dataset"""
-        logger.info("Calculating concept probabilities...")
-
         all_concepts = [concept for concepts in df["concepts"] for concept in concepts]
         concept_counts = Counter(all_concepts)
 
         total_images = len(df)
-        logger.debug(f"Total images: {total_images}")
 
-        # P(concept) = (n of images with this concept) / (total n of images)
-        probabilities = {
-            concept: count / total_images for concept, count in concept_counts.items()
-        }
-        logger.debug(f"Concept probabilities: {probabilities}")
+        # init probabilities with 0.0 for all possible concepts first
+        all_possible_concepts = [concept for concepts in self.all_concepts.values() for concept in concepts]
+        probabilities = {concept: 0.0 for concept in all_possible_concepts}
+
+        # update probabilities for concepts that actually appear in the data
+        probabilities.update({
+            concept: count / total_images 
+            for concept, count in concept_counts.items()
+        })
 
         category_probabilities = {}
 
         # sort by categories
         for category, concepts in self.all_concepts.items():
-          category_concepts = [concept for concept in concepts if concept in concept_counts]
-          category_probabilities[category] = {concept: probabilities.get(concept, 0) for concept in category_concepts}
+            category_probabilities[category] = {
+                concept: probabilities.get(concept, 0.0) 
+                for concept in concepts
+            }
 
-        logger.info(f"Category probabilities calculated: {category_probabilities}")
         return category_probabilities
     
     def calculate_bias(self, dataframe: pd.DataFrame, label_mapping: Callable[[int], str]) -> Dict:
-        logger.info("Calculating bias...")
-        
         dataset_bias = {}
     
         for label in dataframe["label"].unique():
             df = dataframe[dataframe["label"] == label]
             name = label_mapping(int(label))
             dataset_bias[name] = self.calculate_concept_probabilities(df)
-
-            logger.info(f"Bias for {name}: {dataset_bias}")
 
         return dataset_bias
 
