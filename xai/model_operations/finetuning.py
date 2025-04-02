@@ -16,7 +16,7 @@ from xai.utils.params import TrainParams
 
 
 def load_checkpoint(
-    model: BaseModel,
+    model: nn.Module,
     checkpoint_path: str,
     optimizer: optim.Optimizer,
     scheduler: Optional[optim.lr_scheduler.ReduceLROnPlateau] = None,
@@ -40,13 +40,15 @@ def load_checkpoint(
 
 
 def get_finetuned(
-    model: BaseModel,
+    wrapper_model: BaseModel,
     train_loader: DataLoader,
     val_loader: DataLoader,
     params: TrainParams,
     checkpoint_dir: str = "checkpoints/",
 ) -> List[str]:
-    logger.info(f"Start finetuning {model.get_name()}")
+    logger.info(f"Start finetuning {wrapper_model.get_name()}")
+
+    model = wrapper_model.get_model()
 
     os.makedirs(checkpoint_dir, exist_ok=True)
 
@@ -140,7 +142,7 @@ def get_finetuned(
                 "val_loss": val_loss,
                 "val_acc": val_acc,
                 "best_val_loss": best_val_loss,
-                "model_name": model.get_name(),
+                "model_name": wrapper_model.get_name(),
             }
 
             torch.save(checkpoint, checkpoint_path)
@@ -155,7 +157,7 @@ def get_finetuned(
 
 
 def evaluate(
-    model: BaseModel, loader: DataLoader, criterion: nn.CrossEntropyLoss
+    model: nn.Module, loader: DataLoader, criterion: nn.CrossEntropyLoss
 ) -> Tuple[float, float]:
     model.eval()
 

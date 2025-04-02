@@ -29,6 +29,7 @@ class Params:
     imagenet_path: Optional[str] = None
     imagenet_classes: Optional[List[str]] = None
     train_params: Optional[TrainParams] = None
+    checkpoints: Optional[List[str]] = None
 
     @classmethod
     def from_yaml(cls, path: str) -> "Params":

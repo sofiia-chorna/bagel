@@ -1,4 +1,4 @@
-from typing import Optional, Iterator
+from typing import Optional
 
 import torch
 from torch import Tensor
@@ -6,6 +6,7 @@ from torchvision.models import AlexNet_Weights, alexnet
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
+from xai.utils.logger import logger
 
 
 class AlexNet(BaseModel):
@@ -20,7 +21,10 @@ class AlexNet(BaseModel):
 
         if checkpoint_path:
             checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            self.alexnet.load_state_dict(checkpoint, strict=False)
+            model_state_dict = checkpoint.get("model_state_dict")
+            self.alexnet.load_state_dict(model_state_dict, strict=True)
+
+            logger.info(f"Loaded from checkpoint: {checkpoint_path}")
 
     def forward(self, x: Tensor):
         return self.alexnet(x)  # type: ignore
@@ -51,5 +55,5 @@ class AlexNet(BaseModel):
         for param in self.alexnet.classifier[6].parameters():
             param.requires_grad = True
 
-    def parameters(self) -> Iterator[torch.nn.Parameter]:
-        return self.alexnet.parameters()
+    def get_model(self) -> torch.nn.Module:
+        return self.alexnet
