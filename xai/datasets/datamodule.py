@@ -23,12 +23,12 @@ class HuggingFaceDataModule:
         self.label_mapping = train_dataset.get_label_mapping()
         self.label_names = train_dataset.get_label_names()
 
-        self.train_loader = self._get_dataloader(train_dataset, batch_size)
-        self.val_loader = self._get_dataloader(val_dataset, batch_size)
+        self.train_loader = self.get_dataloader(train_dataset, batch_size)
+        self.val_loader = self.get_dataloader(val_dataset, batch_size)
 
         logger.info(f"End creating dataloaders")
 
-    def _get_dataloader(
+    def get_dataloader(
         self, dataset: Dataset, batch_size: int, shuffle: bool = False
     ) -> DataLoader:
         return DataLoader(
