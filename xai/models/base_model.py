@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, Iterator
 
 from torch import Tensor, nn
 
@@ -31,3 +31,11 @@ class BaseModel(nn.Module, ABC):
         Returns:
             str: Name
         """
+
+    @abstractmethod
+    def prepare_for_finetuning(self) -> str:
+        """Unfreeze layers"""
+
+    @abstractmethod
+    def parameters(self) -> Iterator[nn.Parameter]:
+        """Return params of the model"""

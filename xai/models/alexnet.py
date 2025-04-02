@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Iterator
 
 import torch
 from torch import Tensor
@@ -36,3 +36,20 @@ class AlexNet(BaseModel):
 
     def get_name(self) -> str:
         return self.alexnet._get_name()
+
+    def prepare_for_finetuning(self):
+        # freeze all params
+        for param in self.alexnet.parameters():
+            param.requires_grad = False
+
+        # unfreeze conv layers
+        for layer in self.get_layers().values():
+            for param in layer.parameters():
+                param.requires_grad = True
+
+        # unfreeze classification layer
+        for param in self.alexnet.classifier[6].parameters():
+            param.requires_grad = True
+
+    def parameters(self) -> Iterator[torch.nn.Parameter]:
+        return self.alexnet.parameters()
