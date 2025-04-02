@@ -108,7 +108,7 @@ def explain(path: str):
         exit(0)
 
     # calculate
-    for model_name in params.models:
+    for index, model_name in enumerate(params.models):
         if (
             params.train_features_path is not None
             and params.val_features_path is not None
@@ -124,7 +124,13 @@ def explain(path: str):
             datamodule = HuggingFaceDataModule(params.dataset_name, params.batch_size)
 
             logger.info(f"Calculating features for {model_name}")
-            model = get_model(model_name, datamodule.num_classes)
+
+            if params.checkpoints is not None:
+                checkpoint = params.checkpoints[index]
+            else:
+                checkpoint = None
+
+            model = get_model(model_name, datamodule.num_classes, checkpoint)
 
             train_features, _ = extract_features(model, datamodule.train_loader)
             val_features, metrics = extract_features(model, datamodule.val_loader)
