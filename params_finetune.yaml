@@ -23,17 +23,17 @@ hyperparams:
   vgg16:
     lr: 1e-4
     weight_decay: 5e-4
-    optimizer: "adam"
+    optimizer: "sgd"
 
   densenet121:
     lr: 5e-5
     weight_decay: 1e-4
-    optimizer: "adamw"
+    optimizer: "sgd"
 
   densenet169:
     lr: 5e-5
     weight_decay: 1e-4
-    optimizer: "adamw"
+    optimizer: "sgd"
 
   efficientnet:
     lr: 3e-5
