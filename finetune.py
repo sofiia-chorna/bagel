@@ -1,3 +1,6 @@
+import os
+from dataclasses import asdict
+
 import click
 from torch.utils.data import DataLoader, random_split
 
@@ -6,7 +9,7 @@ from xai.model_operations.finetuning import get_finetuned, plot_training_history
 from xai.models.models import get_model
 from xai.utils.cli import path
 from xai.utils.logger import logger
-from xai.utils.params import Params
+from xai.utils.params import Params, TrainParams
 
 
 def split_train_data(
@@ -55,13 +58,20 @@ def finetune(path: str):
 
         model.prepare_for_finetuning()
 
-        checkpoint_dir = f"{model.get_name()}_{params.dataset_name}_checkpoints"
+        dataset_name = params.dataset_name.split("/")[-1]
+        checkpoint_dir = os.path.join("checkpoints", model.get_name(), dataset_name)
+
+        # setup hyperparams
+        train_params_dict = asdict(params.train_params)
+        model_params = params.get_hyperparams(model_name)
+        merged_params_dict = {**train_params_dict, **model_params}
+        train_params = TrainParams(**merged_params_dict)
 
         checkpoint_paths = get_finetuned(
             model,
             train_loader,
             val_loader,
-            params.train_params,
+            train_params,
             checkpoint_dir,
         )
 
