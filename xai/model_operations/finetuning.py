@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import torch
@@ -13,6 +13,42 @@ from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
 from xai.utils.logger import logger
 from xai.utils.params import TrainParams
+
+
+def get_optimizer(
+    optimizer_name: str, params: Iterable[nn.Parameter], lr: float, weight_decay: float
+):
+    match optimizer_name:
+        case "sgd":
+            return optim.SGD(
+                params,
+                lr=lr,
+                weight_decay=weight_decay,
+                momentum=0.9,
+            )
+        case "adam":
+            return optim.Adam(
+                params,
+                lr=lr,
+                weight_decay=weight_decay,
+            )
+        case "adamw":
+            return optim.AdamW(
+                params,
+                lr=lr,
+                weight_decay=weight_decay,
+            )
+        case "rmsprop":
+            return optim.RMSprop(
+                params,
+                lr=lr,
+                weight_decay=weight_decay,
+                momentum=0.9,
+            )
+        case _:
+            raise ValueError(
+                f"{optimizer_name} is not supported. Use ['sgd', 'adam', 'adamw', 'rmsprop']"
+            )
 
 
 def load_checkpoint(
@@ -53,11 +89,13 @@ def get_finetuned(
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     model.to(DEVICE)
-    optimizer = optim.Adam(
-        filter(lambda p: p.requires_grad, model.parameters()),
-        lr=params.lr,
-        weight_decay=params.weight_decay,
+    optimizer = get_optimizer(
+        optimizer_name=params.optimizer,
+        params=filter(lambda p: p.requires_grad, model.parameters()),
+        lr=float(params.lr),
+        weight_decay=float(params.weight_decay),
     )
+
     criterion = nn.CrossEntropyLoss()
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=2)
 
@@ -89,6 +127,8 @@ def get_finetuned(
 
     # train
     for epoch in range(start_epoch, end_epoch):
+        model.train()
+
         training_loss = 0.0
         num_batches = 0
 
@@ -150,8 +190,10 @@ def get_finetuned(
 
             checkpoint_paths.append(checkpoint_path)
 
-            if monitor.should_stop(val_loss):
-                break
+        if monitor.should_stop(val_loss):
+            logger.info("Early stopping triggered.")
+            model.eval()
+            break
 
     return checkpoint_paths
 
