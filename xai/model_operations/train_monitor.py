@@ -1,5 +1,5 @@
 class TrainMonitor:
-    def __init__(self, patience: int = 5, min_delta: float = 0.01):
+    def __init__(self, patience: int = 5, min_delta: float = 0.001):
         self.patience = patience
         self.min_delta = min_delta
         self.best_val = float("infinity")
