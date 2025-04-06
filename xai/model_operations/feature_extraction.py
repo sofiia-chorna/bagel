@@ -8,7 +8,6 @@ from tqdm import tqdm
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
-from xai.utils.file import save
 from xai.utils.logger import logger
 
 
@@ -39,6 +38,7 @@ def extract_features(
         hook = layer.register_forward_hook(hook_fn)
         hooks.append(hook)
 
+    logger.info(f"Dataset size: {len(loader.dataset)}")
     with torch.no_grad():
         for images, labels in tqdm(loader):
             images = images.to(DEVICE)
