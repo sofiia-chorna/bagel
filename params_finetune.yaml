@@ -1,0 +1,70 @@
+batch_size: 64
+dataset_type: "hugging_face"  # ["hugging_face", "imagenet"]
+dataset_name: "ENSTA-U2IS/HuskyVsWolf"
+models: ["alexnet", "densenet121", "densenet169", "efficientnet", "googlelenet", "resnet18", "resnext50", "resnext101", "vgg16"]
+#"inceptionv3"
+
+train_params:
+  num_epochs: 50
+  save_interval: 100
+
+hyperparams:
+  alexnet:
+    lr: 0.001
+    weight_decay: 0.001
+    batch_size: 64
+    optimizer: "adam"
+
+  resnet18:
+    lr: 0.001
+    weight_decay: 0.0005
+    batch_size: 64
+    optimizer: "adam"
+
+  vgg16:
+    lr: 0.0005
+    weight_decay: 0.0005
+    batch_size: 64
+    optimizer: "adam"
+
+  densenet121:
+    lr: 0.0003
+    weight_decay: 0.0001
+    batch_size: 32
+    optimizer: "sgd"
+
+  densenet169:
+    lr: 0.0003
+    weight_decay: 0.0001
+    batch_size: 32
+    optimizer: "sgd"
+
+  efficientnet:
+    lr: 0.0001
+    weight_decay: 0.0001
+    batch_size: 16
+    optimizer: "sgd"
+
+  googlelenet:
+    lr: 0.0003
+    weight_decay: 0.0005
+    batch_size: 32
+    optimizer: "sgd"
+
+  resnext50:
+    lr: 0.0003
+    weight_decay: 0.0001
+    batch_size: 32
+    optimizer: "sgd"
+
+  resnext101:
+    lr: 0.0001
+    weight_decay: 0.0001
+    batch_size: 16
+    optimizer: "sgd"
+
+  inceptionv3:
+    lr: 0.0003
+    weight_decay: 0.0001
+    batch_size: 32
+    optimizer: "sgd"
