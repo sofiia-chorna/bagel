@@ -7,64 +7,55 @@ models: ["alexnet", "densenet121", "densenet169", "efficientnet", "googlelenet",
 train_params:
   num_epochs: 50
   save_interval: 100
+  batch_size: 64
 
 hyperparams:
   alexnet:
-    lr: 0.001
-    weight_decay: 0.001
-    batch_size: 64
+    lr: 1e-4
+    weight_decay: 5e-4
     optimizer: "adam"
 
   resnet18:
-    lr: 0.001
-    weight_decay: 0.0005
-    batch_size: 64
-    optimizer: "adam"
+    lr: 1e-3
+    weight_decay: 1e-4
+    optimizer: "sgd"
 
   vgg16:
-    lr: 0.0005
-    weight_decay: 0.0005
-    batch_size: 64
+    lr: 1e-4
+    weight_decay: 5e-4
     optimizer: "adam"
 
   densenet121:
-    lr: 0.0003
-    weight_decay: 0.0001
-    batch_size: 32
-    optimizer: "sgd"
+    lr: 5e-5
+    weight_decay: 1e-4
+    optimizer: "adamw"
 
   densenet169:
-    lr: 0.0003
-    weight_decay: 0.0001
-    batch_size: 32
-    optimizer: "sgd"
+    lr: 5e-5
+    weight_decay: 1e-4
+    optimizer: "adamw"
 
   efficientnet:
-    lr: 0.0001
-    weight_decay: 0.0001
-    batch_size: 16
-    optimizer: "sgd"
+    lr: 3e-5
+    weight_decay: 1e-5
+    optimizer: "adamw"
 
   googlelenet:
-    lr: 0.0003
-    weight_decay: 0.0005
-    batch_size: 32
-    optimizer: "sgd"
+    lr: 1e-4
+    weight_decay: 2e-4
+    optimizer: "adam"
 
   resnext50:
-    lr: 0.0003
-    weight_decay: 0.0001
-    batch_size: 32
+    lr: 1e-3
+    weight_decay: 1e-4
     optimizer: "sgd"
 
   resnext101:
-    lr: 0.0001
-    weight_decay: 0.0001
-    batch_size: 16
+    lr: 5e-4
+    weight_decay: 1e-4
     optimizer: "sgd"
 
-  inceptionv3:
-    lr: 0.0003
-    weight_decay: 0.0001
-    batch_size: 32
-    optimizer: "sgd"
+  inceptionv3: # Input size: 299x299
+    lr: 1e-4
+    weight_decay: 1e-4
+    optimizer: "rmsprop"
