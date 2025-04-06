@@ -11,6 +11,7 @@ from torchvision.models import (
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
+from xai.utils.model import load_from_checkpoint
 
 
 class ResNeXt(BaseModel):
@@ -21,6 +22,8 @@ class ResNeXt(BaseModel):
         checkpoint_path: Optional[str] = None,
     ) -> None:
         super().__init__()
+
+        self.type = type  # type: ignore
 
         match type:
             case "resnext50":
@@ -38,8 +41,7 @@ class ResNeXt(BaseModel):
         self.resnext.to(DEVICE)
 
         if checkpoint_path:
-            checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            self.resnext.load_state_dict(checkpoint, strict=False)
+            load_from_checkpoint(self.resnext, checkpoint_path)
 
     def forward(self, x: Tensor):
         return self.resnext(x)
@@ -54,4 +56,27 @@ class ResNeXt(BaseModel):
         }
 
     def get_name(self) -> str:
-        return self.resnext._get_name()
+        match self.type:
+            case "resnext50":
+                return "ResNext50"
+            case "resnext101":
+                return "ResNext101"
+            case _:
+                return self.resnext._get_name()
+
+    def prepare_for_finetuning(self):
+        # freeze all params
+        for param in self.resnext.parameters():
+            param.requires_grad = False
+
+        # unfreeze conv layers
+        for layer in self.get_layers().values():
+            for param in layer.parameters():
+                param.requires_grad = True
+
+        # unfreeze classification layer
+        for param in self.resnext.fc.parameters():
+            param.requires_grad = True
+
+    def get_model(self) -> torch.nn.Module:
+        return self.resnext

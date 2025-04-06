@@ -6,7 +6,7 @@ from torchvision.models import AlexNet_Weights, alexnet
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
-from xai.utils.logger import logger
+from xai.utils.model import load_from_checkpoint
 
 
 class AlexNet(BaseModel):
@@ -20,11 +20,7 @@ class AlexNet(BaseModel):
         self.alexnet.to(DEVICE)
 
         if checkpoint_path:
-            checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            model_state_dict = checkpoint.get("model_state_dict")
-            self.alexnet.load_state_dict(model_state_dict, strict=True)
-
-            logger.info(f"Loaded from checkpoint: {checkpoint_path}")
+            load_from_checkpoint(self.alexnet, checkpoint_path)
 
     def forward(self, x: Tensor):
         return self.alexnet(x)  # type: ignore

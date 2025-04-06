@@ -6,6 +6,7 @@ from torchvision.models import EfficientNet_B0_Weights, efficientnet_b0
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
+from xai.utils.model import load_from_checkpoint
 
 
 class EfficientNet(BaseModel):
@@ -19,8 +20,7 @@ class EfficientNet(BaseModel):
         self.efficientnet.to(DEVICE)
 
         if checkpoint_path:
-            checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            self.efficientnet.load_state_dict(checkpoint, strict=False)
+            load_from_checkpoint(self.efficientnet, checkpoint_path)
 
     def forward(self, x: Tensor):
         return self.efficientnet(x)
@@ -36,3 +36,20 @@ class EfficientNet(BaseModel):
 
     def get_name(self) -> str:
         return self.efficientnet._get_name()
+
+    def prepare_for_finetuning(self):
+        # freeze all params
+        for param in self.efficientnet.parameters():
+            param.requires_grad = False
+
+        # unfreeze conv layers
+        for layer in self.get_layers().values():
+            for param in layer.parameters():
+                param.requires_grad = True
+
+        # unfreeze classification layer
+        for param in self.efficientnet.classifier[-1].parameters():
+            param.requires_grad = True
+
+    def get_model(self) -> torch.nn.Module:
+        return self.efficientnet

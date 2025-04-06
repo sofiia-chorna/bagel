@@ -11,6 +11,7 @@ from torchvision.models import (
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
+from xai.utils.model import load_from_checkpoint
 
 
 class DenseNet(BaseModel):
@@ -21,6 +22,8 @@ class DenseNet(BaseModel):
         checkpoint_path: Optional[str] = None,
     ) -> None:
         super().__init__()
+
+        self.type = type  # type: ignore
 
         match type:
             case "densenet121":
@@ -36,8 +39,7 @@ class DenseNet(BaseModel):
         self.densenet.to(DEVICE)
 
         if checkpoint_path:
-            checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            self.densenet.load_state_dict(checkpoint, strict=False)
+            load_from_checkpoint(self.densenet, checkpoint_path)
 
     def forward(self, x: Tensor):
         return self.densenet(x)  # type: ignore
@@ -52,4 +54,27 @@ class DenseNet(BaseModel):
         }
 
     def get_name(self) -> str:
-        return self.densenet._get_name()
+        match self.type:
+            case "densenet121":
+                return "DenseNet121"
+            case "densenet169":
+                return "DenseNet169"
+            case _:
+                return self.densenet._get_name()
+
+    def prepare_for_finetuning(self):
+        # freeze all params
+        for param in self.densenet.parameters():
+            param.requires_grad = False
+
+        # unfreeze conv layers
+        for layer in self.get_layers().values():
+            for param in layer.parameters():
+                param.requires_grad = True
+
+        # unfreeze classification layer
+        for param in self.densenet.classifier.parameters():
+            param.requires_grad = True
+
+    def get_model(self) -> torch.nn.Module:
+        return self.densenet

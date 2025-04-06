@@ -6,6 +6,7 @@ from torchvision.models import Inception_V3_Weights, inception_v3
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
+from xai.utils.model import load_from_checkpoint
 
 
 class InceptionV3(BaseModel):
@@ -19,8 +20,7 @@ class InceptionV3(BaseModel):
         self.inception.to(DEVICE)
 
         if checkpoint_path:
-            checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            self.inception.load_state_dict(checkpoint, strict=False)
+            load_from_checkpoint(self.inception, checkpoint_path)
 
     def forward(self, x: Tensor):
         return self.inception(x)
@@ -36,3 +36,20 @@ class InceptionV3(BaseModel):
 
     def get_name(self) -> str:
         return "InceptionV3"
+
+    def prepare_for_finetuning(self):
+        # freeze all params
+        for param in self.inception.parameters():
+            param.requires_grad = False
+
+        # unfreeze conv layers
+        for layer in self.get_layers().values():
+            for param in layer.parameters():
+                param.requires_grad = True
+
+        # unfreeze classification layer
+        for param in self.inception.fc.parameters():
+            param.requires_grad = True
+
+    def get_model(self) -> torch.nn.Module:
+        return self.inception

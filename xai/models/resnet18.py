@@ -6,6 +6,7 @@ from torchvision.models import ResNet18_Weights, resnet18
 
 from xai.models.base_model import BaseModel
 from xai.utils.consts import DEVICE
+from xai.utils.model import load_from_checkpoint
 
 
 class ResNet18(BaseModel):
@@ -19,8 +20,7 @@ class ResNet18(BaseModel):
         self.resnet18.to(DEVICE)
 
         if checkpoint_path:
-            checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
-            self.resnet18.load_state_dict(checkpoint, strict=False)
+            load_from_checkpoint(self.resnet18, checkpoint_path)
 
     def forward(self, x: Tensor):
         return self.resnet18(x)  # type: ignore
@@ -35,4 +35,21 @@ class ResNet18(BaseModel):
         }
 
     def get_name(self) -> str:
-        return self.resnet18._get_name()
+        return "ResNet18"
+
+    def prepare_for_finetuning(self):
+        # freeze all params
+        for param in self.resnet18.parameters():
+            param.requires_grad = False
+
+        # unfreeze conv layers
+        for layer in self.get_layers().values():
+            for param in layer.parameters():
+                param.requires_grad = True
+
+        # unfreeze classification layer
+        for param in self.resnet18.fc.parameters():
+            param.requires_grad = True
+
+    def get_model(self) -> torch.nn.Module:
+        return self.resnet18
