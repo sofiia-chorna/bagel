@@ -1,3 +1,4 @@
+import concurrent.futures
 from typing import Callable, Dict, List
 
 import numpy as np
@@ -36,15 +37,24 @@ def evaluate(
 
     y_pred: np.ndarray = classifier.predict(X_test)  # type: ignore
 
-    for i, concept in enumerate(concepts):
-        # logger.info(f"start predicting proba for {concept} ({i} / {len(concepts)})")
-        # calculate average probability
+    def process_concept(i, concept):
         binary_clf: BaseEstimator = classifier.estimators_[i]
         probs: np.ndarray = binary_clf.predict_proba(X_test)  # type: ignore
-        concept_avg_probabilities[concept] = probs[:, 1].mean().item()
+        avg_prob = probs[:, 1].mean().item()
 
-        # calculate accuracy
-        concept_accuracies[concept] = accuracy_score(y_test[:, i], y_pred[:, i])  # type: ignore
+        accuracy = accuracy_score(y_test[:, i], y_pred[:, i])  # type: ignore
+
+        return concept, avg_prob, accuracy
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(process_concept, i, concept)
+            for i, concept in enumerate(concepts)
+        ]
+        for future in concurrent.futures.as_completed(futures):
+            concept, avg_prob, accuracy = future.result()
+            concept_avg_probabilities[concept] = avg_prob
+            concept_accuracies[concept] = accuracy
 
     return {
         "probability": concept_avg_probabilities,
@@ -71,8 +81,6 @@ def run_multilabel_clf(
             train_df[layer] = list(train_features.numpy())
             val_df[layer] = list(val_features_dict[layer].numpy())
 
-            logger.info("list numpy convert")
-
             X_train = np.array(train_df[layer].to_list())
             y_train = mlb.transform(train_df["concepts"].tolist())
 
@@ -97,12 +105,18 @@ def run_multilabel_clf(
             classifier.fit(X_train_scaled, y_train)
             logger.info("Classifier is trained")
 
+            """
             save(
                 "pickle",
-                f"checkpoints/classifier_checkpoint_layer_{layer}.pkl",
+                f"checkpoints/inceptionv3/classifier_checkpoint_layer_{layer}.pkl",
                 classifier,
             )
-            save("pickle", f"checkpoints/scaler_checkpoint_layer_{layer}.pkl", scaler)
+            save(
+                "pickle",
+                f"checkpoints/inceptionv3/scaler_checkpoint_layer_{layer}.pkl",
+                scaler,
+            )
+            """
 
             layer_results = {}
             for label, group in val_df.groupby("label", sort=False):
@@ -118,17 +132,18 @@ def run_multilabel_clf(
                     y_test=y_test_label,
                 )
 
+                """
                 save(
                     "json",
-                    f"results/imagenet/{layer}/resnet18_{layer}_{label}.json",
+                    f"results/imagenet/{layer}/inceptionv3_{layer}_{label}.json",
                     label_results,
                 )
-
+                """
                 label_name = label_mapping(int(label))
                 layer_results[label_name] = format_by_category(label_results)
 
             results[layer] = layer_results
-            save("json", f"results/imagenet/resnet18_{layer}.json", layer_results)
+            # save("json", f"results/imagenet/inceptionv3_{layer}.json", layer_results)
 
         logger.info("Completed multilabel classification")
 
