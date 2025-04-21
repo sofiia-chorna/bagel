@@ -6,6 +6,7 @@ from pandas import DataFrame
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import GridSearchCV
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
@@ -17,8 +18,7 @@ from xai.utils.logger import logger
 
 
 def get_multilabel_binarizer(df: DataFrame) -> MultiLabelBinarizer:
-    all_concepts = df["concepts"].explode().unique()
-
+    all_concepts = df["concepts"].explode().dropna().unique()
     mlb = MultiLabelBinarizer()
     mlb.fit([list(all_concepts)])
     logger.info(f"Fitted MultiLabelBinarizer with {len(all_concepts)} classes")
@@ -36,14 +36,17 @@ def evaluate(
     concept_accuracies: Dict[str, float] = {}
 
     y_pred: np.ndarray = classifier.predict(X_test)  # type: ignore
+    """
+    y_prob: np.ndarray = np.array(
+        [est.predict_proba(X_test)[:, 1] for est in classifier.estimators_]
+    ).T
+    """
 
     def process_concept(i, concept):
         binary_clf: BaseEstimator = classifier.estimators_[i]
-        probs: np.ndarray = binary_clf.predict_proba(X_test)  # type: ignore
-        avg_prob = probs[:, 1].mean().item()
-
-        accuracy = accuracy_score(y_test[:, i], y_pred[:, i])  # type: ignore
-
+        probs: np.ndarray = binary_clf.predict_proba(X_test)[:, 1]  # type: ignore
+        avg_prob = probs.mean().item()
+        accuracy = accuracy_score(y_test[:, i], y_pred[:, i])
         return concept, avg_prob, accuracy
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -74,6 +77,8 @@ def run_multilabel_clf(
     mlb = get_multilabel_binarizer(train_df)
     results = {}
 
+    param_grid = {"estimator__estimator__C": [0.01, 0.1, 1.0, 10.0]}
+
     for layer, train_features in train_features_dict.items():
         if layer in train_features_dict.keys():
             logger.info(f"Processing layer {layer}")
@@ -91,32 +96,33 @@ def run_multilabel_clf(
 
             logger.info("Scaler is fitted and data is transformed")
 
-            classifier = MultiOutputClassifier(
+            base_classifier = MultiOutputClassifier(
                 OneVsRestClassifier(
                     LogisticRegression(
                         solver="liblinear",
                         class_weight="balanced",
                         max_iter=1000,
-                        C=0.1,
                     )
                 ),
                 n_jobs=-1,
             )
-            classifier.fit(X_train_scaled, y_train)
-            logger.info("Classifier is trained")
 
-            """
-            save(
-                "pickle",
-                f"checkpoints/inceptionv3/classifier_checkpoint_layer_{layer}.pkl",
-                classifier,
+            logger.info(f"Performing grid search for layer {layer}")
+            grid_search = GridSearchCV(
+                base_classifier,
+                param_grid,
+                cv=5,
+                scoring="average_precision",
+                n_jobs=-1,
+                verbose=1,
             )
-            save(
-                "pickle",
-                f"checkpoints/inceptionv3/scaler_checkpoint_layer_{layer}.pkl",
-                scaler,
+            grid_search.fit(X_train_scaled, y_train)
+            logger.info(
+                f"Best C for layer {layer}: {grid_search.best_params_['estimator__estimator__C']}"
             )
-            """
+
+            classifier = grid_search.best_estimator_
+            logger.info(f"Best classifier trained for layer {layer}")
 
             layer_results = {}
             for label, group in val_df.groupby("label", sort=False):
@@ -132,83 +138,12 @@ def run_multilabel_clf(
                     y_test=y_test_label,
                 )
 
-                """
-                save(
-                    "json",
-                    f"results/imagenet/{layer}/inceptionv3_{layer}_{label}.json",
-                    label_results,
-                )
-                """
                 label_name = label_mapping(int(label))
                 layer_results[label_name] = format_by_category(label_results)
 
             results[layer] = layer_results
-            # save("json", f"results/imagenet/inceptionv3_{layer}.json", layer_results)
 
-        logger.info("Completed multilabel classification")
-
-    return results
-
-
-def run_multilabel_proba(
-    train_df: DataFrame,
-    val_df: DataFrame,
-    train_features_dict: Dict[str, Tensor],
-    val_features_dict: Dict[str, Tensor],
-    label_mapping: Callable[[int], str],
-) -> Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, float]]]]]:
-    logger.info("Start multilabel classification")
-
-    mlb = get_multilabel_binarizer(train_df)
-    results = {}
-
-    last_layer = list(train_features_dict.items())[-1]
-    layer, train_features = last_layer
-
-    train_df[layer] = list(train_features.numpy())
-    val_df[layer] = list(val_features_dict[layer].numpy())
-
-    X_train = np.array(train_df[layer].to_list())
-    y_train = mlb.transform(train_df["concepts"].tolist())
-
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-
-    classifier = MultiOutputClassifier(
-        OneVsRestClassifier(
-            LogisticRegression(
-                solver="liblinear",
-                class_weight="balanced",
-                max_iter=1000,
-                C=0.1,
-                n_jobs=-1,
-            )
-        )
-    )
-    classifier.fit(X_train, y_train)
-
-    layer_results = {}
-    for label, group in val_df.groupby("label", sort=False):
-        X_test_label = np.array(group[layer].tolist())
-        X_test_label = scaler.transform(X_test_label)
-        y_test_label = mlb.transform(group["concepts"].tolist())
-
-        concept_avg_probabilities: Dict[str, np.ndarray] = {}
-
-        # calculate probability
-        for i, concept in enumerate(mlb.classes_):
-            binary_clf: BaseEstimator = classifier.estimators_[i]
-            probs: np.ndarray = binary_clf.predict_proba(X_test_label)  # type: ignore
-            concept_avg_probabilities[concept] = probs[:, 1].tolist()
-
-            label_name = label_mapping(int(label))
-            layer_results[label_name] = {
-                "probability": concept_avg_probabilities,
-            }
-
-    results[layer] = layer_results
-
-    logger.info("End multilabel classification")
+        logger.info(f"Completed multilabel classification for layer {layer}")
 
     return results
 
