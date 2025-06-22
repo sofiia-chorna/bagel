@@ -1,0 +1,22 @@
+{
+    "physical_parts": [
+      "Furry",
+      "Whiskered",
+      "Four-legged"
+    ],
+    "color": [
+      "black",
+      "white"
+    ],
+    "scene": [
+      "forest",
+      "industrial",
+      "inside city",
+      "living room",
+      "mountain"
+    ],
+    "texture": [
+      "fuzzy",
+      "shiny"
+    ]
+  }

@@ -1,0 +1,73 @@
+{
+  "physical_parts": [
+    "Furry",
+    "Whiskered",
+    "Pointy-eared",
+    "Slitted-eyed",
+    "Four-legged",
+    "Snout",
+    "Wagging-tailed",
+    "Snout-nosed",
+    "Floppy-eared",
+    "Tail-wagging"
+  ],
+  "color": [
+    "red",
+    "blue",
+    "green",
+    "yellow",
+    "black",
+    "white",
+    "brown",
+    "pink",
+    "purple",
+    "orange",
+    "grey"
+  ],
+  "scene": [
+    "beach",
+    "building",
+    "forest",
+    "highway",
+    "industrial",
+    "inside city",
+    "kitchen",
+    "living room",
+    "mountain",
+    "office",
+    "open country",
+    "store",
+    "suburb",
+    "tall building",
+    "street"
+  ],
+  "texture": [
+    "circular",
+    "cloudy",
+    "dotted",
+    "fissured",
+    "fuzzy",
+    "glossy",
+    "grainy",
+    "leaf",
+    "lined",
+    "marble",
+    "matted",
+    "polished",
+    "shiny",
+    "striped",
+    "rust"
+  ],
+  "material": [
+    "fabric",
+    "foliage",
+    "glass",
+    "leather",
+    "metal",
+    "paper",
+    "plastic",
+    "stone",
+    "water",
+    "wood"
+  ]
+}
