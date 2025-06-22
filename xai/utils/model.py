@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 
-from xai.utils.consts import DEVICE
-from xai.utils.logger import logger
+from bagel.xai.utils.consts import DEVICE
+from bagel.xai.utils.logger import logger
 
 
 def load_from_checkpoint(model: nn.Module, checkpoint_path: str):
